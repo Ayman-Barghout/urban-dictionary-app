@@ -9,7 +9,7 @@ class UrbanDictApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ResultPage(passedTerm: 'Ayman'),
+      home: ResultPage(passedTerm: 'Potato'),
     );
   }
 }

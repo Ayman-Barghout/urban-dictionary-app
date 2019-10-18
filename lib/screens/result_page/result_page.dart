@@ -1,101 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:urban_dict_slang/services/api/http_api.dart';
+
+import 'package:provider/provider.dart';
+import 'package:urban_dict_slang/providers/term_provider.dart';
 
 import 'package:urban_dict_slang/widgets/definition_tile.dart';
-import 'package:urban_dict_slang/models/definition.dart';
 
 import 'package:urban_dict_slang/utils/styles.dart' as customStyles;
+import 'package:urban_dict_slang/widgets/rounded_header_appbar.dart';
 
-class ResultPage extends StatefulWidget {
+class ResultPage extends StatelessWidget {
   const ResultPage({Key key, this.passedTerm}) : super(key: key);
 
   final String passedTerm;
 
   @override
-  _ResultPageState createState() => _ResultPageState();
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<TermProvider>(
+          builder: (context) => TermProvider(passedTerm),
+        ),
+      ],
+      child: ResultPageBody(),
+    );
+  }
 }
 
-class _ResultPageState extends State<ResultPage> {
-  String term;
-  Future<List<Definition>> definitions;
-
-  initState() {
-    super.initState();
-    definitions = HttpApi().getDefinitions(widget.passedTerm);
-    term = widget.passedTerm;
-  }
+class ResultPageBody extends StatelessWidget {
+  const ResultPageBody({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    TermProvider termProvider = Provider.of<TermProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () => print('Search action pressed'),
-          ),
-        ],
+      appBar: RoundedBottomAppBar(
+        bookmarkIcon: Icons.star_border,
+        term: termProvider.term,
       ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                color: Colors.blue,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.star_border, color: Colors.yellowAccent),
-                      onPressed: () => print('bookmark pressed'),
-                    ),
-                    Center(
-                      child: Text(
-                        term,
-                        style: customStyles.definitionHeaderTextStyle,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+      body: termProvider.loading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView.builder(
+              itemCount: termProvider.definitions.length ?? 0,
+              itemBuilder: (BuildContext context, int index) {
+                return DefinitionTile(
+                  definition: termProvider.definitions[index],
+                  goToDefinition: termProvider.updateTerm,
+                );
+              },
             ),
-            Expanded(
-              flex: 3,
-              child: FutureBuilder(
-                future: definitions,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                    case ConnectionState.waiting:
-                      return Center(
-                        child: Text('Loading...'),
-                      );
-                    default:
-                      if (snapshot.hasError)
-                        return Center(
-                          child: Text('Error: ${snapshot.error}'),
-                        );
-                      else if (snapshot.data.length == 0)
-                        return Center(
-                          child: Text('No such term'),
-                        );
-                      else
-                        return ListView.builder(
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return DefinitionTile(
-                              definition: snapshot.data[index],
-                            );
-                          },
-                        );
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -13,14 +13,18 @@ class HttpApi implements Api {
   Future<List<Definition>> getDefinitions(String term) async {
     http.Response response = await http.get(URL_PATH + term);
 
-    var body = jsonDecode(response.body);
-    List<dynamic> definitionsList = body['list'];
-    List<Definition> definitions = List<Definition>();
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      List<dynamic> definitionsList = body['list'];
+      List<Definition> definitions = List<Definition>();
 
-    for (Map<String, dynamic> json in definitionsList) {
-      definitions.add(Definition.fromJson(json));
+      for (Map<String, dynamic> json in definitionsList) {
+        definitions.add(Definition.fromJson(json));
+      }
+
+      return definitions;
+    } else {
+      throw Exception('Failed to connect to server');
     }
-
-    return definitions;
   }
 }

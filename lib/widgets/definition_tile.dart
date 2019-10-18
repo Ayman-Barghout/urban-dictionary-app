@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:urban_dict_slang/models/definition.dart';
-import 'package:urban_dict_slang/utils/styles.dart' as customStyles;
+import 'package:urban_dict_slang/widgets/tappable_text.dart';
 
 class DefinitionTile extends StatelessWidget {
-  const DefinitionTile({Key key, this.definition}) : super(key: key);
+  const DefinitionTile({Key key, this.definition, this.goToDefinition})
+      : super(key: key);
+
   final Definition definition;
+  final Function goToDefinition;
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +20,17 @@ class DefinitionTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Text(
-            definition.definition.replaceAll(RegExp(r'[\[\]]'), ''),
-            style: customStyles.definitionTextStyle,
-          ),
+          TappableText(
+              rawText: definition.definition,
+              onTap: goToDefinition,
+              type: 'definition'),
           SizedBox(
             height: 10.0,
           ),
-          Text(
-            definition.example.replaceAll(RegExp(r'[\[\]]'), ''),
-            style: customStyles.exampleTextStyle,
+          TappableText(
+            rawText: definition.example,
+            onTap: goToDefinition,
+            type: 'example',
           ),
           SizedBox(
             height: 10.0,
