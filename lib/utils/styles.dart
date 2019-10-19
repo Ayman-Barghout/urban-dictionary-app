@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 // Result page styles
-const definitionHeaderTextStyle = TextStyle(
+const termHeaderTextStyle = TextStyle(
   color: Colors.white,
-  fontSize: 30.0,
+  fontSize: 35.0,
+  fontWeight: FontWeight.w500,
 );
 
 // Definition Tile styles

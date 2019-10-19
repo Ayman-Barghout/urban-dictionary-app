@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
-class RoundedBottomAppBar extends StatelessWidget
+import 'package:urban_dict_slang/utils/styles.dart' as customStyles;
+import 'package:urban_dict_slang/widgets/rounded_search_field.dart';
+
+class RoundedHeaderAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-  const RoundedBottomAppBar(
+  const RoundedHeaderAppBar(
       {Key key,
       this.term,
       this.bookmarkIcon,
-      this.searchBox,
       this.onSearch,
       this.onBookmarkPress,
       this.onBackbuttonPress})
@@ -17,68 +19,60 @@ class RoundedBottomAppBar extends StatelessWidget
   final Function onBackbuttonPress;
   final Function onBookmarkPress;
   final String term;
-  final Widget searchBox;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        SizedBox.fromSize(
-          size: preferredSize,
-          child: LayoutBuilder(
-            builder: (context, constraint) {
-              final width = constraint.maxWidth * 8;
-              return ClipRect(
-                child: OverflowBox(
-                  maxHeight: double.infinity,
-                  maxWidth: double.infinity,
-                  child: SizedBox(
-                      width: width,
-                      height: width,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          bottom: (width / 2 - preferredSize.height / 2),
-                        ),
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                              color: Colors.blue,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black54, blurRadius: 10.0),
-                              ]),
-                        ),
-                      )),
-                ),
-              );
-            },
+    return Container(
+      height: 200.0,
+      width: double.infinity,
+      decoration: ShapeDecoration(
+        shape: BeveledRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.elliptical(150.0, 20.0),
+            bottomRight: Radius.elliptical(150.0, 20.0),
           ),
         ),
-        Positioned(
-          top: 20.0,
-          right: 20.0,
-          child: IconButton(
-            onPressed: onBookmarkPress,
-            icon: Icon(bookmarkIcon),
+        gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blue[300], Colors.blue[500]],
+            stops: [0.0001, 1.0]),
+      ),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              IconButton(
+                onPressed: onBackbuttonPress,
+                icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: 35),
+              ),
+              IconButton(
+                onPressed: onBookmarkPress,
+                icon: Icon(bookmarkIcon, color: Colors.white, size: 35),
+              ),
+            ],
           ),
-        ),
-        Positioned(
-          top: 20.0,
-          left: 20.0,
-          child: IconButton(
-            onPressed: onBackbuttonPress,
-            icon: Icon(Icons.arrow_back_ios),
+          Text(
+            term,
+            textAlign: TextAlign.center,
+            style: customStyles.termHeaderTextStyle,
           ),
-        ),
-        Positioned(
-          bottom: 30.0,
-          right: 100.0,
-          child: Text(term),
-        ),
-      ],
+          Container(
+            margin: EdgeInsets.only(top: 15.0),
+            width: 250.0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.horizontal(
+                  left: Radius.circular(25.0), right: Radius.circular(25.0)),
+            ),
+            child: RoundedSearchField(onSearch: onSearch),
+          ),
+        ],
+      ),
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(200.0);
+  Size get preferredSize => const Size.fromHeight(150.0);
 }

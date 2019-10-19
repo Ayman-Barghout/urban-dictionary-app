@@ -1,35 +1,25 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:urban_dict_slang/models/definition.dart';
+import 'package:urban_dict_slang/models/term.dart';
 import 'package:urban_dict_slang/services/api/http_api.dart';
 
 class TermProvider with ChangeNotifier {
-  String _term;
-  List<Definition> _definitions;
+  Term _term;
   bool _loading;
 
   TermProvider(String passedTerm) {
-    term = passedTerm;
-    updateTerm(term);
+    updateTerm(passedTerm);
   }
 
   void updateTerm(String newTerm) async {
-    term = newTerm;
     loading = true;
-    definitions = await HttpApi().getDefinitions(term);
+    term = await HttpApi().getDefinitions(newTerm);
     loading = false;
   }
 
-  List<Definition> get definitions => _definitions;
+  Term get term => _term;
 
-  set definitions(List<Definition> newDefinitions) {
-    _definitions = newDefinitions;
-    notifyListeners();
-  }
-
-  String get term => _term;
-
-  set term(String newTerm) {
+  set term(Term newTerm) {
     _term = newTerm;
     notifyListeners();
   }
