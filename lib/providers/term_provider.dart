@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'package:urban_dict_slang/models/term.dart';
 import 'package:urban_dict_slang/services/api/http_api.dart';

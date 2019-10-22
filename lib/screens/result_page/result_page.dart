@@ -13,22 +13,6 @@ class ResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<TermProvider>(
-          builder: (context) => TermProvider(passedTerm),
-        ),
-      ],
-      child: ResultPageBody(),
-    );
-  }
-}
-
-class ResultPageBody extends StatelessWidget {
-  const ResultPageBody({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
     TermProvider termProvider = Provider.of<TermProvider>(context);
     return Scaffold(
       appBar: AppBar(
@@ -42,6 +26,7 @@ class ResultPageBody extends StatelessWidget {
           onSearch: (String searchTerm) {
             termProvider.updateTerm(searchTerm);
           },
+          onBackbuttonPress: () => Navigator.of(context).pop(),
         ),
       ),
       body: termProvider.loading
