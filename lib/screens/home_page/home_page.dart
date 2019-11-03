@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:urban_dict_slang/providers/favorites_provider.dart';
+import 'package:urban_dict_slang/providers/terms_provider.dart';
 import 'package:urban_dict_slang/screens/home_page/search_view.dart';
+import 'package:urban_dict_slang/screens/home_page/terms_view.dart';
+
+import 'package:urban_dict_slang/utils/styles.dart' as customStyles;
+import 'favorites_view.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -13,28 +20,18 @@ class _HomePageState extends State<HomePage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: History',
-      style: optionStyle,
-    ),
+    TermsView(),
     SearchView(),
-    Text(
-      'Index 2: Bookmark',
-      style: optionStyle,
-    ),
+    FavoritesView(),
   ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+    TermsProvider termsProvider = Provider.of<TermsProvider>(context);
+    FavoritesProvider favoritesProvider =
+        Provider.of<FavoritesProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
         elevation: 0,
       ),
       body: Container(
@@ -59,8 +56,17 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue[800],
-        onTap: _onItemTapped,
+        selectedItemColor: customStyles.primaryColor,
+        onTap: (i) {
+          setState(() {
+            _selectedIndex = i;
+          });
+          if (i == 0) {
+            termsProvider.getTerms();
+          } else if (i == 2) {
+            favoritesProvider.getFavorites();
+          }
+        },
       ),
     );
   }

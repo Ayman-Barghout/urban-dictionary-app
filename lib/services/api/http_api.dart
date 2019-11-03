@@ -1,50 +1,53 @@
-import 'package:http/http.dart' as http;
 import 'dart:io';
+
+import 'package:http/http.dart' as http;
 
 import 'dart:convert';
 
-import 'package:urban_dict_slang/models/definition.dart';
-
-import 'package:urban_dict_slang/models/term.dart';
 import 'package:urban_dict_slang/services/api/api.dart';
+import 'package:urban_dict_slang/services/db/database.dart';
 
 class HttpApi implements Api {
   static const String URL_PATH =
       'http://api.urbandictionary.com/v0/define?term=';
 
-  @override
-  Future<Term> getDefinitions(String term) async {
-    String message;
-
+  Future<bool> _isUserConnected() async {
     try {
-      // Check if there is internet connection through looking up example.com domain
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        // Call to urban dictionary API and mapping to model
-        http.Response response = await http.get(URL_PATH + term);
-        if (response.statusCode == 200) {
-          var body = jsonDecode(response.body);
-          List<Definition> definitions = List<Definition>();
-          List<dynamic> definitionsList = body['list'];
-
-          if (definitionsList.length == 0) {
-            message = 'No such term found, please provide a real word';
-          } else {
-            for (Map<String, dynamic> json in definitionsList) {
-              definitions.add(Definition.fromJson(json));
-            }
-            message = null;
-          }
-
-          Term termModel =
-              Term(term, definitions, message, DateTime.now(), false);
-          return termModel;
-        }
+        return true;
+      } else {
+        return false;
       }
     } on SocketException catch (_) {
-      // No internet connection, send user the message
-      message = 'No internet connection, please try again';
-      return Term(term, null, message, null, false);
+      return false;
+    }
+  }
+
+  @override
+  Future<List<Definition>> getDefinitions(String term) async {
+    bool connected = await _isUserConnected();
+    print('conntected ' + connected.toString());
+    if (connected) {
+      http.Response response = await http.get(URL_PATH + term);
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+        List<Definition> definitions = List<Definition>();
+        List<dynamic> definitionsList = body['list'];
+
+        if (definitionsList.length == 0) {
+          return [];
+        } else {
+          for (Map<String, dynamic> json in definitionsList) {
+            definitions.add(Definition.fromJson(json));
+          }
+        }
+        return definitions;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
     }
   }
 }

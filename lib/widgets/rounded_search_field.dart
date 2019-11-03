@@ -18,37 +18,40 @@ class _RoundedSearchFieldState extends State<RoundedSearchField> {
 
   void _onTap(String value) {
     widget.onSearch(value);
-    _searchController.clear();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _searchController.clear());
   }
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: _searchController,
-      onSubmitted: (value) => _onTap(value),
-      style: TextStyle(
-        fontSize: 20.0,
-        color: Colors.blueAccent,
-      ),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        suffixIcon: IconButton(
-          icon: Icon(
-            Icons.arrow_right,
-            size: 35.0,
-          ),
-          onPressed: () => _onTap(_searchController.text),
+    return Container(
+      child: TextField(
+        controller: _searchController,
+        onSubmitted: (value) => _onTap(value),
+        style: TextStyle(
+          fontSize: 20.0,
+          color: Colors.blueAccent,
         ),
-        contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-        prefixIcon: Icon(Icons.search),
-        hintText: "Search...",
-        border: OutlineInputBorder(
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
+          suffixIcon: IconButton(
+            icon: Icon(
+              Icons.arrow_right,
+              size: 35.0,
+            ),
+            onPressed: () => _onTap(_searchText),
+          ),
+          contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+          prefixIcon: Icon(Icons.search),
+          hintText: "Search...",
+          border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white, width: 32.0),
+              borderRadius: BorderRadius.circular(25.0)),
+          focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white, width: 32.0),
-            borderRadius: BorderRadius.circular(25.0)),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 32.0),
-          borderRadius: BorderRadius.circular(25.0),
+            borderRadius: BorderRadius.circular(25.0),
+          ),
         ),
       ),
     );

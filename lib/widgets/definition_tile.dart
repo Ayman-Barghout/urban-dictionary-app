@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:urban_dict_slang/models/definition.dart';
+import 'package:urban_dict_slang/services/db/database.dart';
 import 'package:urban_dict_slang/widgets/tappable_text.dart';
 
 class DefinitionTile extends StatelessWidget {
@@ -59,7 +59,7 @@ class DefinitionTile extends StatelessWidget {
                     size: 30.0,
                   ),
                   Text(
-                    definition.thumbsUp.toString(),
+                    definition.thumbs_up.toString(),
                     style: TextStyle(fontSize: 16.0),
                   ),
                 ],
@@ -72,7 +72,7 @@ class DefinitionTile extends StatelessWidget {
                     size: 30.0,
                   ),
                   Text(
-                    definition.thumbsDown.toString(),
+                    definition.thumbs_down.toString(),
                     style: TextStyle(fontSize: 16.0),
                   ),
                 ],

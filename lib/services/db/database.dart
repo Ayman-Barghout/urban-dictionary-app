@@ -9,8 +9,8 @@ class Definitions extends Table {
   TextColumn get definition => text()();
   TextColumn get example => text()();
   TextColumn get author => text()();
-  IntColumn get thumbsUp => integer()();
-  IntColumn get thumbsDown => integer()();
+  IntColumn get thumbs_up => integer()();
+  IntColumn get thumbs_down => integer()();
 }
 
 class Terms extends Table {
@@ -22,18 +22,11 @@ class Terms extends Table {
   Set<Column> get primaryKey => {term};
 }
 
-class TermWithDefinitions {
-  final Term term;
-  final List<Definition> definitions;
-
-  TermWithDefinitions(this.term, this.definitions);
-}
-
-@UseMoor(tables: [Terms, Definitions])
+@UseMoor(tables: [Terms, Definitions], daos: [TermDao, DefinitionsDao])
 class AppDatabase extends _$AppDatabase {
   AppDatabase()
       : super((FlutterQueryExecutor.inDatabaseFolder(
-          path: 'termDB.sqlite',
+          path: 'urban_dict_db.sqlite',
           logStatements: true,
         )));
 
@@ -53,7 +46,7 @@ class TermDao extends DatabaseAccessor<AppDatabase> with _$TermDaoMixin {
         ]))
       .get();
 
-  Future toggleFavorite(Term passedTerm) =>
+  Future<int> toggleFavorite(Term passedTerm) =>
       (update(terms)..where((t) => t.term.equals(passedTerm.term)))
           .write(TermsCompanion(isFavorite: Value(!passedTerm.isFavorite)));
 
@@ -66,11 +59,11 @@ class TermDao extends DatabaseAccessor<AppDatabase> with _$TermDaoMixin {
             [(t) => OrderingTerm(expression: t.term, mode: OrderingMode.asc)]))
       .get();
 
-  Future<TermWithDefinitions> createNewTerm(String newTerm) async {
+  Future<Term> insertNewTerm(String newTerm) async {
     final term =
         Term(term: newTerm, isFavorite: false, lastViewed: DateTime.now());
     await into(terms).insert(term);
-    return TermWithDefinitions(term, []);
+    return term;
   }
 
   Future<Term> getTerm(String term) =>
@@ -84,11 +77,26 @@ class DefinitionsDao extends DatabaseAccessor<AppDatabase>
 
   DefinitionsDao(this.db) : super(db);
 
+  Future<List<Definition>> getDefinitions(String passedTerm) =>
+      (select(definitions)
+            ..where((d) => d.term.equals(passedTerm.toLowerCase().trim())))
+          .get();
+
   Future updateDefinitions(String term, List<Definition> newDefinitions) async {
     await (delete(definitions)..where((d) => d.term.equals(term))).go();
     return into(definitions).insertAll(newDefinitions);
   }
 
-  Future insertDefinitions(List<Definition> newDefinitions) =>
-      into(definitions).insertAll(newDefinitions);
+  Future insertDefinitions(String term, List<Definition> newDefinitions) =>
+      into(definitions).insertAll(newDefinitions
+          .map((d) => Definition(
+                id: d.id,
+                term: term,
+                example: d.example,
+                thumbs_down: d.thumbs_down,
+                thumbs_up: d.thumbs_up,
+                definition: d.definition,
+                author: d.author,
+              ))
+          .toList());
 }

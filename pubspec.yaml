@@ -26,6 +26,8 @@ dependencies:
   http: ^0.12.0+2
   provider: ^3.1.0
   moor_flutter: ^2.0.0
+  flare_splash_screen: ^3.0.0
+
 
 dev_dependencies:
   flutter_test:
@@ -46,7 +48,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+     - assets/flare/splash.flr
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

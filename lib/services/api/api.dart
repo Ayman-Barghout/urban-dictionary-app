@@ -1,5 +1,5 @@
-import 'package:urban_dict_slang/models/term.dart';
+import 'package:urban_dict_slang/services/db/database.dart';
 
 abstract class Api {
-  Future<Term> getDefinitions(String term);
+  Future<List<Definition>> getDefinitions(String term);
 }

@@ -220,16 +220,16 @@ class Definition extends DataClass implements Insertable<Definition> {
   final String definition;
   final String example;
   final String author;
-  final int thumbsUp;
-  final int thumbsDown;
+  final int thumbs_up;
+  final int thumbs_down;
   Definition(
       {@required this.id,
       @required this.term,
       @required this.definition,
       @required this.example,
       @required this.author,
-      @required this.thumbsUp,
-      @required this.thumbsDown});
+      @required this.thumbs_up,
+      @required this.thumbs_down});
   factory Definition.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -244,9 +244,9 @@ class Definition extends DataClass implements Insertable<Definition> {
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}example']),
       author:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}author']),
-      thumbsUp:
+      thumbs_up:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}thumbs_up']),
-      thumbsDown: intType
+      thumbs_down: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}thumbs_down']),
     );
   }
@@ -258,8 +258,8 @@ class Definition extends DataClass implements Insertable<Definition> {
       definition: serializer.fromJson<String>(json['definition']),
       example: serializer.fromJson<String>(json['example']),
       author: serializer.fromJson<String>(json['author']),
-      thumbsUp: serializer.fromJson<int>(json['thumbsUp']),
-      thumbsDown: serializer.fromJson<int>(json['thumbsDown']),
+      thumbs_up: serializer.fromJson<int>(json['thumbs_up']),
+      thumbs_down: serializer.fromJson<int>(json['thumbs_down']),
     );
   }
   @override
@@ -271,8 +271,8 @@ class Definition extends DataClass implements Insertable<Definition> {
       'definition': serializer.toJson<String>(definition),
       'example': serializer.toJson<String>(example),
       'author': serializer.toJson<String>(author),
-      'thumbsUp': serializer.toJson<int>(thumbsUp),
-      'thumbsDown': serializer.toJson<int>(thumbsDown),
+      'thumbs_up': serializer.toJson<int>(thumbs_up),
+      'thumbs_down': serializer.toJson<int>(thumbs_down),
     };
   }
 
@@ -289,12 +289,12 @@ class Definition extends DataClass implements Insertable<Definition> {
           : Value(example),
       author:
           author == null && nullToAbsent ? const Value.absent() : Value(author),
-      thumbsUp: thumbsUp == null && nullToAbsent
+      thumbs_up: thumbs_up == null && nullToAbsent
           ? const Value.absent()
-          : Value(thumbsUp),
-      thumbsDown: thumbsDown == null && nullToAbsent
+          : Value(thumbs_up),
+      thumbs_down: thumbs_down == null && nullToAbsent
           ? const Value.absent()
-          : Value(thumbsDown),
+          : Value(thumbs_down),
     );
   }
 
@@ -304,16 +304,16 @@ class Definition extends DataClass implements Insertable<Definition> {
           String definition,
           String example,
           String author,
-          int thumbsUp,
-          int thumbsDown}) =>
+          int thumbs_up,
+          int thumbs_down}) =>
       Definition(
         id: id ?? this.id,
         term: term ?? this.term,
         definition: definition ?? this.definition,
         example: example ?? this.example,
         author: author ?? this.author,
-        thumbsUp: thumbsUp ?? this.thumbsUp,
-        thumbsDown: thumbsDown ?? this.thumbsDown,
+        thumbs_up: thumbs_up ?? this.thumbs_up,
+        thumbs_down: thumbs_down ?? this.thumbs_down,
       );
   @override
   String toString() {
@@ -323,8 +323,8 @@ class Definition extends DataClass implements Insertable<Definition> {
           ..write('definition: $definition, ')
           ..write('example: $example, ')
           ..write('author: $author, ')
-          ..write('thumbsUp: $thumbsUp, ')
-          ..write('thumbsDown: $thumbsDown')
+          ..write('thumbs_up: $thumbs_up, ')
+          ..write('thumbs_down: $thumbs_down')
           ..write(')'))
         .toString();
   }
@@ -339,7 +339,7 @@ class Definition extends DataClass implements Insertable<Definition> {
               $mrjc(
                   example.hashCode,
                   $mrjc(author.hashCode,
-                      $mrjc(thumbsUp.hashCode, thumbsDown.hashCode)))))));
+                      $mrjc(thumbs_up.hashCode, thumbs_down.hashCode)))))));
   @override
   bool operator ==(other) =>
       identical(this, other) ||
@@ -349,8 +349,8 @@ class Definition extends DataClass implements Insertable<Definition> {
           other.definition == this.definition &&
           other.example == this.example &&
           other.author == this.author &&
-          other.thumbsUp == this.thumbsUp &&
-          other.thumbsDown == this.thumbsDown);
+          other.thumbs_up == this.thumbs_up &&
+          other.thumbs_down == this.thumbs_down);
 }
 
 class DefinitionsCompanion extends UpdateCompanion<Definition> {
@@ -359,16 +359,16 @@ class DefinitionsCompanion extends UpdateCompanion<Definition> {
   final Value<String> definition;
   final Value<String> example;
   final Value<String> author;
-  final Value<int> thumbsUp;
-  final Value<int> thumbsDown;
+  final Value<int> thumbs_up;
+  final Value<int> thumbs_down;
   const DefinitionsCompanion({
     this.id = const Value.absent(),
     this.term = const Value.absent(),
     this.definition = const Value.absent(),
     this.example = const Value.absent(),
     this.author = const Value.absent(),
-    this.thumbsUp = const Value.absent(),
-    this.thumbsDown = const Value.absent(),
+    this.thumbs_up = const Value.absent(),
+    this.thumbs_down = const Value.absent(),
   });
   DefinitionsCompanion.insert({
     this.id = const Value.absent(),
@@ -376,30 +376,30 @@ class DefinitionsCompanion extends UpdateCompanion<Definition> {
     @required String definition,
     @required String example,
     @required String author,
-    @required int thumbsUp,
-    @required int thumbsDown,
+    @required int thumbs_up,
+    @required int thumbs_down,
   })  : term = Value(term),
         definition = Value(definition),
         example = Value(example),
         author = Value(author),
-        thumbsUp = Value(thumbsUp),
-        thumbsDown = Value(thumbsDown);
+        thumbs_up = Value(thumbs_up),
+        thumbs_down = Value(thumbs_down);
   DefinitionsCompanion copyWith(
       {Value<int> id,
       Value<String> term,
       Value<String> definition,
       Value<String> example,
       Value<String> author,
-      Value<int> thumbsUp,
-      Value<int> thumbsDown}) {
+      Value<int> thumbs_up,
+      Value<int> thumbs_down}) {
     return DefinitionsCompanion(
       id: id ?? this.id,
       term: term ?? this.term,
       definition: definition ?? this.definition,
       example: example ?? this.example,
       author: author ?? this.author,
-      thumbsUp: thumbsUp ?? this.thumbsUp,
-      thumbsDown: thumbsDown ?? this.thumbsDown,
+      thumbs_up: thumbs_up ?? this.thumbs_up,
+      thumbs_down: thumbs_down ?? this.thumbs_down,
     );
   }
 }
@@ -466,10 +466,10 @@ class $DefinitionsTable extends Definitions
     );
   }
 
-  final VerificationMeta _thumbsUpMeta = const VerificationMeta('thumbsUp');
-  GeneratedIntColumn _thumbsUp;
+  final VerificationMeta _thumbs_upMeta = const VerificationMeta('thumbs_up');
+  GeneratedIntColumn _thumbs_up;
   @override
-  GeneratedIntColumn get thumbsUp => _thumbsUp ??= _constructThumbsUp();
+  GeneratedIntColumn get thumbs_up => _thumbs_up ??= _constructThumbsUp();
   GeneratedIntColumn _constructThumbsUp() {
     return GeneratedIntColumn(
       'thumbs_up',
@@ -478,10 +478,11 @@ class $DefinitionsTable extends Definitions
     );
   }
 
-  final VerificationMeta _thumbsDownMeta = const VerificationMeta('thumbsDown');
-  GeneratedIntColumn _thumbsDown;
+  final VerificationMeta _thumbs_downMeta =
+      const VerificationMeta('thumbs_down');
+  GeneratedIntColumn _thumbs_down;
   @override
-  GeneratedIntColumn get thumbsDown => _thumbsDown ??= _constructThumbsDown();
+  GeneratedIntColumn get thumbs_down => _thumbs_down ??= _constructThumbsDown();
   GeneratedIntColumn _constructThumbsDown() {
     return GeneratedIntColumn(
       'thumbs_down',
@@ -492,7 +493,7 @@ class $DefinitionsTable extends Definitions
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, term, definition, example, author, thumbsUp, thumbsDown];
+      [id, term, definition, example, author, thumbs_up, thumbs_down];
   @override
   $DefinitionsTable get asDslTable => this;
   @override
@@ -532,17 +533,17 @@ class $DefinitionsTable extends Definitions
     } else if (author.isRequired && isInserting) {
       context.missing(_authorMeta);
     }
-    if (d.thumbsUp.present) {
-      context.handle(_thumbsUpMeta,
-          thumbsUp.isAcceptableValue(d.thumbsUp.value, _thumbsUpMeta));
-    } else if (thumbsUp.isRequired && isInserting) {
-      context.missing(_thumbsUpMeta);
+    if (d.thumbs_up.present) {
+      context.handle(_thumbs_upMeta,
+          thumbs_up.isAcceptableValue(d.thumbs_up.value, _thumbs_upMeta));
+    } else if (thumbs_up.isRequired && isInserting) {
+      context.missing(_thumbs_upMeta);
     }
-    if (d.thumbsDown.present) {
-      context.handle(_thumbsDownMeta,
-          thumbsDown.isAcceptableValue(d.thumbsDown.value, _thumbsDownMeta));
-    } else if (thumbsDown.isRequired && isInserting) {
-      context.missing(_thumbsDownMeta);
+    if (d.thumbs_down.present) {
+      context.handle(_thumbs_downMeta,
+          thumbs_down.isAcceptableValue(d.thumbs_down.value, _thumbs_downMeta));
+    } else if (thumbs_down.isRequired && isInserting) {
+      context.missing(_thumbs_downMeta);
     }
     return context;
   }
@@ -573,11 +574,11 @@ class $DefinitionsTable extends Definitions
     if (d.author.present) {
       map['author'] = Variable<String, StringType>(d.author.value);
     }
-    if (d.thumbsUp.present) {
-      map['thumbs_up'] = Variable<int, IntType>(d.thumbsUp.value);
+    if (d.thumbs_up.present) {
+      map['thumbs_up'] = Variable<int, IntType>(d.thumbs_up.value);
     }
-    if (d.thumbsDown.present) {
-      map['thumbs_down'] = Variable<int, IntType>(d.thumbsDown.value);
+    if (d.thumbs_down.present) {
+      map['thumbs_down'] = Variable<int, IntType>(d.thumbs_down.value);
     }
     return map;
   }
@@ -594,6 +595,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $TermsTable get terms => _terms ??= $TermsTable(this);
   $DefinitionsTable _definitions;
   $DefinitionsTable get definitions => _definitions ??= $DefinitionsTable(this);
+  TermDao _termDao;
+  TermDao get termDao => _termDao ??= TermDao(this as AppDatabase);
+  DefinitionsDao _definitionsDao;
+  DefinitionsDao get definitionsDao =>
+      _definitionsDao ??= DefinitionsDao(this as AppDatabase);
   @override
   List<TableInfo> get allTables => [terms, definitions];
 }

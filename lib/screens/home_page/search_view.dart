@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:urban_dict_slang/providers/definitions_provider.dart';
 import 'package:urban_dict_slang/providers/term_provider.dart';
 import 'package:urban_dict_slang/widgets/rounded_search_field.dart';
 import 'package:urban_dict_slang/utils/styles.dart' as customStyles;
@@ -10,6 +11,8 @@ class SearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TermProvider termProvider = Provider.of<TermProvider>(context);
+    DefinitionsProvider definitionsProvider =
+        Provider.of<DefinitionsProvider>(context);
     return Container(
         child: Column(
       children: <Widget>[
@@ -18,19 +21,20 @@ class SearchView extends StatelessWidget {
           child: ClipPath(
             clipper: BottomWaveClipper(),
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 30.0),
-              color: Colors.blue,
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              color: customStyles.primaryColor,
               child: Center(
                 child: Column(
                   children: <Widget>[
                     Text('Urban Dictionary',
                         style: customStyles.termHeaderTextStyle),
                     SizedBox(
-                      height: 40.0,
+                      height: 30.0,
                     ),
                     RoundedSearchField(
                       onSearch: (value) {
                         termProvider.updateTerm(value);
+                        definitionsProvider.updateDefinitions(value);
                         Navigator.of(context).pushNamed('/result');
                       },
                     ),
