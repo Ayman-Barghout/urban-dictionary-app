@@ -28,6 +28,7 @@ class _RoundedSearchFieldState extends State<RoundedSearchField> {
       child: TextField(
         controller: _searchController,
         onSubmitted: (value) => _onTap(value),
+        maxLength: 30,
         style: TextStyle(
           fontSize: 20.0,
           color: Colors.blueAccent,
