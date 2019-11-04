@@ -16,6 +16,10 @@ class TermsProvider with ChangeNotifier {
     loading = false;
   }
 
+  void deleteTerm(String term) async {
+    await repository.deleteTerm(term);
+  }
+
   Terms get terms => _terms;
 
   set terms(Terms newTerm) {

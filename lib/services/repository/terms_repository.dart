@@ -23,4 +23,12 @@ class TermsRepository {
       return models.Terms(favorites, null);
     }
   }
+
+  Future toggleFavorite(Term term) async {
+    await db.termDao.toggleFavorite(term);
+  }
+
+  Future deleteTerm(String term) async {
+    await db.termDao.deleteTerm(term);
+  }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:urban_dict_slang/providers/definitions_provider.dart';
 import 'package:urban_dict_slang/providers/favorites_provider.dart';
+import 'package:urban_dict_slang/providers/term_provider.dart';
+import 'package:urban_dict_slang/services/db/database.dart';
 import 'package:urban_dict_slang/utils/styles.dart' as customStyles;
 
 class FavoritesView extends StatelessWidget {
@@ -8,7 +11,11 @@ class FavoritesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FavoritesProvider termsProvider = Provider.of<FavoritesProvider>(context);
+    FavoritesProvider favoritesProvider =
+        Provider.of<FavoritesProvider>(context);
+    TermProvider termProvider = Provider.of<TermProvider>(context);
+    DefinitionsProvider definitionsProvider =
+        Provider.of<DefinitionsProvider>(context);
     return Container(
       color: customStyles.primaryColor,
       child: Column(
@@ -33,24 +40,48 @@ class FavoritesView extends StatelessWidget {
                   topRight: Radius.circular(20.0),
                 ),
               ),
-              child: termsProvider.favorites == null
+              child: favoritesProvider.favorites == null
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
-                  : termsProvider.favorites.message == null
+                  : favoritesProvider.favorites.message == null
                       ? ListView.builder(
-                          itemCount: termsProvider.favorites.terms.length,
+                          itemCount: favoritesProvider.favorites.terms.length,
                           itemBuilder: (BuildContext context, int index) {
+                            Term favoriteTerm =
+                                favoritesProvider.favorites.terms[index];
                             return ListTile(
+                              onTap: () async {
+                                termProvider.updateTerm(favoriteTerm.term);
+                                definitionsProvider
+                                    .updateDefinitions(favoriteTerm.term);
+                                var nav = await Navigator.of(context)
+                                    .pushNamed('/result');
+                                if (nav == null || nav == true) {
+                                  favoritesProvider.getFavorites();
+                                }
+                              },
                               title: Text(
-                                  termsProvider.favorites.terms[index].term),
-                              trailing: Text(termsProvider
-                                  .favorites.terms[index].lastViewed
-                                  .toString()),
+                                favoriteTerm.term[0].toUpperCase() +
+                                    favoriteTerm.term.substring(1),
+                                style: customStyles.definitionTextStyle,
+                              ),
+                              trailing: IconButton(
+                                icon: Icon(
+                                  Icons.star,
+                                  color: customStyles.primaryColorLight,
+                                ),
+                                onPressed: () {
+                                  favoritesProvider
+                                      .toggleFavorite(favoriteTerm);
+                                  favoritesProvider.getFavorites();
+                                },
+                              ),
                             );
                           },
                         )
-                      : Center(child: Text(termsProvider.favorites.message)),
+                      : Center(
+                          child: Text(favoritesProvider.favorites.message)),
             ),
           )
         ],

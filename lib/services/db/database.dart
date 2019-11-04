@@ -68,6 +68,9 @@ class TermDao extends DatabaseAccessor<AppDatabase> with _$TermDaoMixin {
 
   Future<Term> getTerm(String term) =>
       (select(terms)..where((t) => t.term.equals(term))).getSingle();
+
+  Future deleteTerm(String term) =>
+      (delete(terms)..where((t) => t.term.equals(term))).go();
 }
 
 @UseDao(tables: [Definitions])

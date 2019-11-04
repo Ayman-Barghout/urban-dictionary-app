@@ -52,6 +52,7 @@ class UrbanDictApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        title: 'Urban Dictionary',
         theme: ThemeData(primaryColor: customStyles.primaryColor),
         routes: {
           '/': (context) => SplashScreen(

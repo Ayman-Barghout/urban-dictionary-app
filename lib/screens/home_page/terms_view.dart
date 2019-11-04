@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:urban_dict_slang/providers/terms_provider.dart';
+import 'package:urban_dict_slang/screens/home_page/widgets/terms_list.dart';
 import 'package:urban_dict_slang/utils/styles.dart' as customStyles;
 
 class TermsView extends StatelessWidget {
@@ -38,18 +39,7 @@ class TermsView extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     )
                   : termsProvider.terms.message == null
-                      ? ListView.builder(
-                          itemCount: termsProvider.terms.terms.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                              title:
-                                  Text(termsProvider.terms.terms[index].term),
-                              trailing: Text(termsProvider
-                                  .terms.terms[index].lastViewed
-                                  .toString()),
-                            );
-                          },
-                        )
+                      ? TermsListWithHeaders()
                       : Center(child: Text(termsProvider.terms.message)),
             ),
           )

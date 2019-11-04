@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:urban_dict_slang/models/terms.dart';
+import 'package:urban_dict_slang/services/db/database.dart' as db;
 import 'package:urban_dict_slang/services/repository/terms_repository.dart';
 
 class FavoritesProvider with ChangeNotifier {
@@ -14,6 +15,10 @@ class FavoritesProvider with ChangeNotifier {
     loading = true;
     favorites = await repository.getAllFavorites();
     loading = false;
+  }
+
+  void toggleFavorite(db.Term term) async {
+    await repository.toggleFavorite(term);
   }
 
   Terms get favorites => _favorites;
