@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class RoundedSearchField extends StatefulWidget {
   const RoundedSearchField({
@@ -26,9 +27,11 @@ class _RoundedSearchFieldState extends State<RoundedSearchField> {
   Widget build(BuildContext context) {
     return Container(
       child: TextField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(30),
+        ],
         controller: _searchController,
         onSubmitted: (value) => _onTap(value),
-        maxLength: 30,
         style: TextStyle(
           fontSize: 20.0,
           color: Colors.blueAccent,

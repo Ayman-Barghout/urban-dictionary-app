@@ -17,64 +17,62 @@ import 'package:urban_dict_slang/services/repository/terms_repository.dart';
 
 import 'package:urban_dict_slang/utils/styles.dart' as customStyles;
 
-void main() => runApp(UrbanDictApp());
+void main() {
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  runApp(UrbanDictApp());
+}
 
 class UrbanDictApp extends StatelessWidget {
   const UrbanDictApp({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]).then((_) {
-      return MultiProvider(
-        providers: [
-          Provider.value(
-            value: AppDatabase(),
-          ),
-          Provider.value(value: HttpApi()),
-          ProxyProvider<AppDatabase, TermRepository>(
-            builder: (_, db, repository) => TermRepository(db),
-          ),
-          ProxyProvider<AppDatabase, TermsRepository>(
-            builder: (_, db, repository) => TermsRepository(db),
-          ),
-          ProxyProvider2<HttpApi, AppDatabase, DefinitionsRepository>(
-            builder: (_, api, db, repository) => DefinitionsRepository(api, db),
-          ),
-          ChangeNotifierProxyProvider<TermRepository, TermProvider>(
-            builder: (_, repository, term) => TermProvider(repository),
-          ),
-          ChangeNotifierProxyProvider<DefinitionsRepository,
-              DefinitionsProvider>(
-            builder: (_, repository, definitions) =>
-                DefinitionsProvider(repository),
-          ),
-          ChangeNotifierProxyProvider<TermsRepository, TermsProvider>(
-            builder: (_, repository, terms) => TermsProvider(repository),
-          ),
-          ChangeNotifierProxyProvider<TermsRepository, FavoritesProvider>(
-            builder: (_, repository, favorites) =>
-                FavoritesProvider(repository),
-          ),
-        ],
-        child: MaterialApp(
-          title: 'Urban Dictionary',
-          theme: ThemeData(primaryColor: customStyles.primaryColor),
-          routes: {
-            '/': (context) => SplashScreen(
-                  'assets/flare/splash.flr',
-                  (context) => HomePage(),
-                  startAnimation: 'intro',
-                  until: () => Future.delayed(Duration(seconds: 3)),
-                  backgroundColor: Colors.white,
-                ),
-            '/homepage': (context) => HomePage(),
-            '/result': (context) => ResultPage()
-          },
-          initialRoute: '/',
+    return MultiProvider(
+      providers: [
+        Provider.value(
+          value: AppDatabase(),
         ),
-      );
-    });
+        Provider.value(value: HttpApi()),
+        ProxyProvider<AppDatabase, TermRepository>(
+          builder: (_, db, repository) => TermRepository(db),
+        ),
+        ProxyProvider<AppDatabase, TermsRepository>(
+          builder: (_, db, repository) => TermsRepository(db),
+        ),
+        ProxyProvider2<HttpApi, AppDatabase, DefinitionsRepository>(
+          builder: (_, api, db, repository) => DefinitionsRepository(api, db),
+        ),
+        ChangeNotifierProxyProvider<TermRepository, TermProvider>(
+          builder: (_, repository, term) => TermProvider(repository),
+        ),
+        ChangeNotifierProxyProvider<DefinitionsRepository, DefinitionsProvider>(
+          builder: (_, repository, definitions) =>
+              DefinitionsProvider(repository),
+        ),
+        ChangeNotifierProxyProvider<TermsRepository, TermsProvider>(
+          builder: (_, repository, terms) => TermsProvider(repository),
+        ),
+        ChangeNotifierProxyProvider<TermsRepository, FavoritesProvider>(
+          builder: (_, repository, favorites) => FavoritesProvider(repository),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Urban Dictionary',
+        theme: ThemeData(primaryColor: customStyles.primaryColor),
+        routes: {
+          '/': (context) => SplashScreen(
+                'assets/flare/splash.flr',
+                (context) => HomePage(),
+                startAnimation: 'intro',
+                until: () => Future.delayed(Duration(seconds: 3)),
+                backgroundColor: Colors.white,
+              ),
+          '/homepage': (context) => HomePage(),
+          '/result': (context) => ResultPage()
+        },
+        initialRoute: '/',
+      ),
+    );
   }
 }
