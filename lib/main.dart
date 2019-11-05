@@ -8,7 +8,6 @@ import 'package:urban_dict_slang/providers/term_provider.dart';
 import 'package:urban_dict_slang/providers/terms_provider.dart';
 import 'package:urban_dict_slang/screens/home_page/home_page.dart';
 
-import 'package:urban_dict_slang/screens/result_page/result_page.dart';
 import 'package:urban_dict_slang/services/api/http_api.dart';
 import 'package:urban_dict_slang/services/db/database.dart';
 import 'package:urban_dict_slang/services/repository/definitions_repository.dart';
@@ -69,7 +68,6 @@ class UrbanDictApp extends StatelessWidget {
                 backgroundColor: Colors.white,
               ),
           '/homepage': (context) => HomePage(),
-          '/result': (context) => ResultPage()
         },
         initialRoute: '/',
       ),

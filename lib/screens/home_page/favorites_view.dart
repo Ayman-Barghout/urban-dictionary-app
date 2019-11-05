@@ -7,7 +7,9 @@ import 'package:urban_dict_slang/services/db/database.dart';
 import 'package:urban_dict_slang/utils/styles.dart' as customStyles;
 
 class FavoritesView extends StatelessWidget {
-  const FavoritesView({Key key}) : super(key: key);
+  const FavoritesView({Key key, this.changeIndex}) : super(key: key);
+
+  final Function changeIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +23,18 @@ class FavoritesView extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Expanded(
-            child: Center(
-              child: Text(
-                'Favorites',
-                style: customStyles.termHeaderTextStyle,
+            child: Container(
+              padding: EdgeInsets.only(top: 25.0),
+              child: Center(
+                child: Text(
+                  'Favorites',
+                  style: customStyles.termHeaderTextStyle,
+                ),
               ),
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 2,
             child: Container(
               padding: EdgeInsets.all(10.0),
               margin: EdgeInsets.only(top: 5.0),
@@ -51,19 +56,17 @@ class FavoritesView extends StatelessWidget {
                             Term favoriteTerm =
                                 favoritesProvider.favorites.terms[index];
                             return ListTile(
-                              onTap: () async {
+                              onTap: () {
                                 termProvider.updateTerm(favoriteTerm.term);
                                 definitionsProvider
                                     .updateDefinitions(favoriteTerm.term);
-                                var nav = await Navigator.of(context)
-                                    .pushNamed('/result');
-                                if (nav == null || nav == true) {
-                                  favoritesProvider.getFavorites();
-                                }
+                                changeIndex(1);
                               },
                               title: Text(
-                                favoriteTerm.term[0].toUpperCase() +
-                                    favoriteTerm.term.substring(1),
+                                favoriteTerm.term != ''
+                                    ? favoriteTerm.term[0].toUpperCase() +
+                                        favoriteTerm.term.substring(1)
+                                    : '',
                                 style: customStyles.definitionTextStyle,
                               ),
                               trailing: IconButton(

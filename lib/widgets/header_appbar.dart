@@ -8,12 +8,12 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.term,
       this.bookmarkIcon,
       this.onBookmarkPress,
-      this.onBackbuttonPress,
+      this.onInfoButtonPress,
       this.child})
       : super(key: key);
 
   final IconData bookmarkIcon;
-  final Function onBackbuttonPress;
+  final Function onInfoButtonPress;
   final Function onBookmarkPress;
   final String term;
   final Widget child;
@@ -21,7 +21,8 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200.0,
+      height: 210.0,
+      padding: EdgeInsets.only(bottom: 15.0),
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -36,8 +37,8 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               IconButton(
-                onPressed: onBackbuttonPress,
-                icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: 35),
+                onPressed: onInfoButtonPress,
+                icon: Icon(Icons.info_outline, color: Colors.white, size: 35),
               ),
               IconButton(
                 onPressed: onBookmarkPress,
@@ -45,8 +46,11 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ],
           ),
+          SizedBox(
+            height: 10.0,
+          ),
           Text(
-            term,
+            term ?? 'Urban Dictionary',
             textAlign: TextAlign.center,
             style: customStyles.termHeaderTextStyle,
           ),

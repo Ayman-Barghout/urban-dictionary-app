@@ -5,7 +5,9 @@ import 'package:urban_dict_slang/screens/home_page/widgets/terms_list.dart';
 import 'package:urban_dict_slang/utils/styles.dart' as customStyles;
 
 class TermsView extends StatelessWidget {
-  const TermsView({Key key}) : super(key: key);
+  const TermsView({Key key, this.changeIndex}) : super(key: key);
+
+  final Function changeIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +17,18 @@ class TermsView extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Expanded(
-            child: Center(
-              child: Text(
-                'History',
-                style: customStyles.termHeaderTextStyle,
+            child: Container(
+              padding: EdgeInsets.only(top: 25.0),
+              child: Center(
+                child: Text(
+                  'History',
+                  style: customStyles.termHeaderTextStyle,
+                ),
               ),
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 2,
             child: Container(
               padding: EdgeInsets.all(10.0),
               margin: EdgeInsets.only(top: 5.0),
@@ -39,7 +44,7 @@ class TermsView extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     )
                   : termsProvider.terms.message == null
-                      ? TermsListWithHeaders()
+                      ? TermsListWithHeaders(changeIndex: changeIndex)
                       : Center(child: Text(termsProvider.terms.message)),
             ),
           )

@@ -19,25 +19,34 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static List<Widget> _widgetOptions = <Widget>[
-    TermsView(),
-    SearchView(),
-    FavoritesView(),
-  ];
+  List<Widget> _buildChildren() => <Widget>[
+        TermsView(
+          changeIndex: updateIndex,
+        ),
+        SearchView(),
+        FavoritesView(
+          changeIndex: updateIndex,
+        ),
+      ];
+
+  void updateIndex(int i) {
+    setState(() {
+      _selectedIndex = i;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> children = _buildChildren();
     TermsProvider termsProvider = Provider.of<TermsProvider>(context);
     FavoritesProvider favoritesProvider =
         Provider.of<FavoritesProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-      ),
+      resizeToAvoidBottomPadding: false,
       body: Container(
         color: Colors.white,
         child: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
+          child: children.elementAt(_selectedIndex),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -58,9 +67,7 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _selectedIndex,
         selectedItemColor: customStyles.primaryColor,
         onTap: (i) {
-          setState(() {
-            _selectedIndex = i;
-          });
+          updateIndex(i);
           if (i == 0) {
             termsProvider.getTerms();
           } else if (i == 2) {
