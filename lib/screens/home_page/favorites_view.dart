@@ -78,6 +78,10 @@ class FavoritesView extends StatelessWidget {
                                   favoritesProvider
                                       .toggleFavorite(favoriteTerm);
                                   favoritesProvider.getFavorites();
+                                  if (termProvider.term.term ==
+                                      favoriteTerm.term) {
+                                    termProvider.updateTerm(favoriteTerm.term);
+                                  }
                                 },
                               ),
                             );

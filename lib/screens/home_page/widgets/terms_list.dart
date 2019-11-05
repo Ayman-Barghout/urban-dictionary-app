@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:urban_dict_slang/models/definitions_wrapper.dart';
 import 'package:urban_dict_slang/providers/definitions_provider.dart';
 import 'package:urban_dict_slang/providers/term_provider.dart';
 import 'package:urban_dict_slang/providers/terms_provider.dart';
@@ -134,6 +135,12 @@ class TermListTile extends StatelessWidget {
         onPressed: () {
           termsProvider.deleteTerm(currentTerm.term);
           termsProvider.getTerms();
+          if (termProvider.term.term == currentTerm.term) {
+            termProvider.term =
+                Term(isFavorite: false, lastViewed: null, term: null);
+          }
+          definitionsProvider.definitions = DefinitionsWrapper([],
+              'Search for a slang or a name, you can also view previous searches or favorited slangs');
         },
       ),
     );
