@@ -36,7 +36,7 @@ class FavoritesView extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Container(
-              padding: EdgeInsets.all(10.0),
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
               margin: EdgeInsets.only(top: 5.0),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -63,10 +63,8 @@ class FavoritesView extends StatelessWidget {
                                 changeIndex(1);
                               },
                               title: Text(
-                                favoriteTerm.term != ''
-                                    ? favoriteTerm.term[0].toUpperCase() +
-                                        favoriteTerm.term.substring(1)
-                                    : '',
+                                favoriteTerm.term[0].toUpperCase() +
+                                    favoriteTerm.term.substring(1),
                                 style: customStyles.definitionTextStyle,
                               ),
                               trailing: IconButton(

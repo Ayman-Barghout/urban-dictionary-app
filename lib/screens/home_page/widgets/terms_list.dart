@@ -125,9 +125,7 @@ class TermListTile extends StatelessWidget {
         changeIndex(1);
       },
       title: Text(
-        currentTerm.term != ''
-            ? currentTerm.term[0].toUpperCase() + currentTerm.term.substring(1)
-            : '',
+        currentTerm.term[0].toUpperCase() + currentTerm.term.substring(1),
         style: customStyles.definitionTextStyle,
       ),
       trailing: IconButton(

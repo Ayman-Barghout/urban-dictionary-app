@@ -30,7 +30,7 @@ class TermsView extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Container(
-              padding: EdgeInsets.all(10.0),
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
               margin: EdgeInsets.only(top: 5.0),
               decoration: BoxDecoration(
                 color: Colors.white,

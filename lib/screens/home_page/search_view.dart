@@ -15,7 +15,7 @@ class SearchView extends StatelessWidget {
   void showAbout(BuildContext context) => showAboutDialog(
           context: context,
           applicationIcon: Image.asset('assets/icons/icon_sm.png'),
-          applicationVersion: '1.0.3 (4)',
+          applicationVersion: '1.0.5 (6)',
           applicationLegalese: 'Pocean Ltd.',
           children: <Widget>[
             SizedBox(
@@ -55,8 +55,13 @@ class SearchView extends StatelessWidget {
               term: term.term,
               bookmarkIcon: term.isFavorite ? Icons.star : Icons.star_border,
               child: RoundedSearchField(onSearch: (String searchTerm) {
-                termProvider.updateTerm(searchTerm);
-                definitionsProvider.updateDefinitions(searchTerm);
+                if (searchTerm != '') {
+                  termProvider.updateTerm(searchTerm);
+                  definitionsProvider.updateDefinitions(searchTerm);
+                } else {
+                  definitionsProvider.definitions = DefinitionsWrapper([],
+                      'Type a slang before you search, empty ain\'t a slang');
+                }
               }),
               onBookmarkPress: () => termProvider.toggleFavorite(),
               onInfoButtonPress: () => showAbout(context),
@@ -67,7 +72,7 @@ class SearchView extends StatelessWidget {
             child: Container(
               color: customStyles.primaryColor,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
