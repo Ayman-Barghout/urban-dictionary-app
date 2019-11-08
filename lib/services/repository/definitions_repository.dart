@@ -8,7 +8,8 @@ class DefinitionsRepository {
 
   DefinitionsRepository(this.httpApi, this.db);
 
-  Future<DefinitionsWrapper> _callApi(Term term, String passedTerm) async {
+  Future<DefinitionsWrapper> _callApi(
+      Term term, String passedTerm, bool outdated) async {
     String modifiedTerm = passedTerm.toLowerCase().trim();
     String message;
 
@@ -21,7 +22,7 @@ class DefinitionsRepository {
       message = 'No such slang found, try another slang';
       return DefinitionsWrapper([], message);
     } else {
-      if (term != null) {
+      if (term != null || outdated) {
         await db.termDao.updateLastViewed(term);
         await db.definitionsDao.updateDefinitions(modifiedTerm, definitions);
       } else {
@@ -36,10 +37,10 @@ class DefinitionsRepository {
     String modifiedTerm = passedTerm.toLowerCase().trim();
     Term term = await db.termDao.getTerm(modifiedTerm);
     if (term == null) {
-      return await _callApi(term, modifiedTerm);
+      return await _callApi(term, modifiedTerm, false);
     } else {
       if (DateTime.now().difference(term.lastViewed).inDays > 5) {
-        return await _callApi(term, modifiedTerm);
+        return await _callApi(term, modifiedTerm, true);
       } else {
         List<Definition> definitions =
             await db.definitionsDao.getDefinitions(modifiedTerm);

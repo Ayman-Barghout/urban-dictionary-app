@@ -39,10 +39,13 @@ class TermsListWithHeaders extends StatelessWidget {
         }
       }
     }
+    print(termsWithDays);
     if (termsWithDays[getDaysDifference(terms[terms.length - 1].lastViewed)] ==
-        null)
+            null &&
+        start > 0)
       termsWithDays[getDaysDifference(terms[terms.length - 1].lastViewed)] =
           terms.sublist(start);
+    print(termsWithDays);
     return termsWithDays;
   }
 
