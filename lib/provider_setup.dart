@@ -1,36 +1,43 @@
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:urban_dict_slang/core/blocs/definitions_bloc/definitions_bloc.dart';
+import 'package:urban_dict_slang/core/blocs/favorited_terms_bloc/bloc.dart';
+import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
+import 'package:urban_dict_slang/core/blocs/terms_history_bloc/bloc.dart';
 import 'package:urban_dict_slang/core/services/api/http_api.dart';
 import 'package:urban_dict_slang/core/services/db/database.dart';
 import 'package:urban_dict_slang/core/services/repository/term_definitions_repository.dart';
 import 'package:urban_dict_slang/core/services/repository/terms_repository.dart';
 
-List<SingleChildCloneableWidget> providers = [
-  ...independentServices,
-  ...dependentServices,
-  ...uiConsumableProviders,
+List<RepositoryProvider> repositoryProviders = [
+  RepositoryProvider<TermDefinitionsRepository>(
+    create: (context) => TermDefinitionsRepository(AppDatabase(), HttpApi()),
+  ),
+  RepositoryProvider<TermsRepository>(
+    create: (context) => TermsRepository(
+      AppDatabase(),
+    ),
+  )
 ];
 
-List<SingleChildCloneableWidget> independentServices = [
-  Provider.value(
-    value: AppDatabase(),
+List<BlocProvider> blocProviders = [
+  BlocProvider<TermBloc>(
+    create: (context) => TermBloc(
+      RepositoryProvider.of<TermDefinitionsRepository>(context),
+    ),
   ),
-  Provider.value(
-    value: HttpApi(),
+  BlocProvider<DefinitionsBloc>(
+    create: (context) => DefinitionsBloc(
+      RepositoryProvider.of<TermDefinitionsRepository>(context),
+    ),
   ),
-];
-
-List<SingleChildCloneableWidget> dependentServices = [
-  ProxyProvider2<AppDatabase, HttpApi, TermDefinitionsRepository>(
-    builder: (_, db, api, repository) => TermDefinitionsRepository(db, api),
+  BlocProvider<TermsHistoryBloc>(
+    create: (context) => TermsHistoryBloc(
+      RepositoryProvider.of<TermsRepository>(context),
+    ),
   ),
-  ProxyProvider<AppDatabase, TermsRepository>(
-    builder: (_, db, repository) => TermsRepository(db),
-  ),
-];
-
-List<SingleChildCloneableWidget> uiConsumableProviders = [
-  StreamProvider<Term>(
-    builder: (context) =>
-        Provider.of<TermDefinitionsRepository>(context, listen: false).term,
+  BlocProvider<FavoritedTermsBloc>(
+    create: (context) => FavoritedTermsBloc(
+      RepositoryProvider.of<TermsRepository>(context),
+    ),
   ),
 ];

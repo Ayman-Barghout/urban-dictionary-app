@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:urban_dict_slang/core/blocs/definitions_bloc/bloc.dart';
+import 'package:urban_dict_slang/core/blocs/favorited_terms_bloc/bloc.dart';
+import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
 
 import 'package:urban_dict_slang/core/services/db/database.dart';
-import 'package:urban_dict_slang/core/viewmodels/views/favorites_view_model.dart';
-import 'package:urban_dict_slang/core/viewmodels/widgets/favorite_button_model.dart';
-import 'package:urban_dict_slang/core/viewmodels/widgets/terms_tile_model.dart';
+import 'package:urban_dict_slang/core/services/repository/term_definitions_repository.dart';
 
 import 'package:urban_dict_slang/ui/shared/app_colors.dart' as customColors;
 import 'package:urban_dict_slang/ui/shared/text_styles.dart' as textStyles;
-
-import '../base_widget.dart';
 
 class FavoritesView extends StatelessWidget {
   const FavoritesView({Key key, this.changeIndex}) : super(key: key);
@@ -35,10 +34,7 @@ class FavoritesView extends StatelessWidget {
           ),
           Expanded(
             flex: 2,
-            child: BaseWidget<FavoritesViewModel>(
-              model: FavoritesViewModel(termsRepository: Provider.of(context)),
-              onModelReady: (model) => model.fetchFavorites(),
-              builder: (context, model, child) => Container(
+            child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
                 margin: EdgeInsets.only(top: 5.0),
                 decoration: BoxDecoration(
@@ -48,52 +44,78 @@ class FavoritesView extends StatelessWidget {
                     topRight: Radius.circular(20.0),
                   ),
                 ),
-                child: model.busy
-                    ? Center(
+                child: BlocBuilder<FavoritedTermsBloc, FavoritedTermsState>(
+                  builder: (context, state) {
+                    if (state is FavoritedTermsLoading) {
+                      return Center(
                         child: CircularProgressIndicator(),
-                      )
-                    : model.message == null
-                        ? ListView.builder(
-                            itemCount: model.favorites.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              Term favoriteTerm = model.favorites[index];
-                              return BaseWidget<TermsTileModel>(
-                                model: TermsTileModel(
-                                    termRepository: Provider.of(context)),
-                                builder: (context, termModel, child) =>
-                                    ListTile(
-                                  onTap: () {
-                                    termModel.updateTerm(favoriteTerm.term);
-                                    changeIndex(1);
-                                  },
-                                  title: Text(
-                                    favoriteTerm.term[0].toUpperCase() +
-                                        favoriteTerm.term.substring(1),
-                                    style: textStyles.definitionStyle,
-                                  ),
-                                  trailing: BaseWidget<FavoriteButtonModel>(
-                                    model: FavoriteButtonModel(
-                                        termRepository: Provider.of(context)),
-                                    builder: (context, buttonModel, child) =>
-                                        IconButton(
-                                      icon: Icon(
-                                        Icons.star,
-                                        color: customColors.primaryColorLight,
-                                      ),
-                                      onPressed: () {
-                                        buttonModel
-                                            .toggleFavorite(favoriteTerm);
-                                        model.fetchFavorites();
-                                      },
-                                    ),
-                                  ),
-                                ),
+                      );
+                    } else if (state is FavoritesEmpty) {
+                      return Center(
+                        child: Text(
+                          state.message,
+                          style: textStyles.definitionStyle,
+                          textAlign: TextAlign.center,
+                          softWrap: true,
+                        ),
+                      );
+                    } else if (state is FavoritedTermsLoaded) {
+                      return ListView.builder(
+                        itemCount: state.favorites.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Term favoriteTerm = state.favorites[index];
+                          return ListTile(
+                            onTap: () {
+                              BlocProvider.of<TermBloc>(context).add(
+                                ChangeTerm(newTerm: favoriteTerm.term),
                               );
+                              BlocProvider.of<DefinitionsBloc>(context)
+                                  .add(FetchDefinitions(favoriteTerm.term));
+                              changeIndex(1);
                             },
-                          )
-                        : Center(child: Text(model.message)),
-              ),
-            ),
+                            title: Text(
+                              favoriteTerm.term[0].toUpperCase() +
+                                  favoriteTerm.term.substring(1),
+                              style: textStyles.definitionStyle,
+                            ),
+                            trailing: BlocBuilder<TermBloc, TermState>(
+                                builder: (context, state) {
+                              Function _onPressed = () {};
+                              Future _toggleWithoutChanging() async {
+                                await RepositoryProvider.of<
+                                        TermDefinitionsRepository>(context)
+                                    .toggleFavorite(favoriteTerm);
+                                BlocProvider.of<FavoritedTermsBloc>(context)
+                                    .add(LoadFavoritedTerms());
+                              }
+
+                              if (state is TermChanged) {
+                                _onPressed = () async {
+                                  if (favoriteTerm.term == state.term.term) {
+                                    _toggleWithoutChanging();
+                                    BlocProvider.of<TermBloc>(context).add(
+                                        ChangeTerm(newTerm: favoriteTerm.term));
+                                  } else {
+                                    _toggleWithoutChanging();
+                                  }
+                                };
+                              } else {
+                                _onPressed = _toggleWithoutChanging;
+                              }
+                              return IconButton(
+                                icon: Icon(
+                                  Icons.star,
+                                  color: customColors.primaryColorLight,
+                                ),
+                                onPressed: _onPressed,
+                              );
+                            }),
+                          );
+                        },
+                      );
+                    }
+                  },
+                )),
           )
         ],
       ),

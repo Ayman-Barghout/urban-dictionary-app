@@ -27,7 +27,6 @@ class HttpApi implements Api {
   @override
   Future<List<Definition>> getDefinitions(String term) async {
     bool connected = await _isUserConnected();
-    print('conntected ' + connected.toString());
     if (connected) {
       http.Response response = await http.get(BASE_URL + term);
       if (response.statusCode == 200) {
@@ -35,12 +34,8 @@ class HttpApi implements Api {
         List<Definition> definitions = List<Definition>();
         List<dynamic> definitionsList = body['list'];
 
-        if (definitionsList.length == 0) {
-          return [];
-        } else {
-          for (Map<String, dynamic> json in definitionsList) {
-            definitions.add(Definition.fromJson(json));
-          }
+        for (Map<String, dynamic> json in definitionsList) {
+          definitions.add(Definition.fromJson(json));
         }
         return definitions;
       } else {

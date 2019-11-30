@@ -31,7 +31,14 @@ class AppDatabase extends _$AppDatabase {
         )));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
+        return m.createAllTables();
+      }, onUpgrade: (Migrator m, int from, int to) async {
+        if (from == 1) {}
+      });
 }
 
 @UseDao(tables: [Terms])
@@ -85,9 +92,8 @@ class DefinitionsDao extends DatabaseAccessor<AppDatabase>
             ..where((d) => d.term.equals(passedTerm.toLowerCase().trim())))
           .get();
 
-  Future updateDefinitions(String term, List<Definition> newDefinitions) async {
+  Future deleteDefinitions(String term) async {
     await (delete(definitions)..where((d) => d.term.equals(term))).go();
-    return into(definitions).insertAll(newDefinitions);
   }
 
   Future insertDefinitions(String term, List<Definition> newDefinitions) =>

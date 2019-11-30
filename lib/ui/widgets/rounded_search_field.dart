@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:urban_dict_slang/core/blocs/definitions_bloc/bloc.dart';
+import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
 
 class RoundedSearchField extends StatefulWidget {
-  final Function onSearch;
-
   const RoundedSearchField({
     Key key,
-    @required this.onSearch,
   }) : super(key: key);
 
   @override
@@ -17,6 +17,14 @@ class _RoundedSearchFieldState extends State<RoundedSearchField> {
   TextEditingController _searchController;
   String _searchText = '';
 
+  void _onSearch(String term) {
+    BlocProvider.of<TermBloc>(context).add(ChangeTerm(newTerm: term));
+    BlocProvider.of<DefinitionsBloc>(context).add(FetchDefinitions(term));
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _searchController.clear());
+    FocusScope.of(context).requestFocus(FocusNode());
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -24,14 +32,7 @@ class _RoundedSearchFieldState extends State<RoundedSearchField> {
         LengthLimitingTextInputFormatter(30),
       ],
       controller: _searchController,
-      onSubmitted: (value) {
-        if (value != '') {
-          widget.onSearch(value);
-          WidgetsBinding.instance
-              .addPostFrameCallback((_) => _searchController.clear());
-          FocusScope.of(context).requestFocus(FocusNode());
-        }
-      },
+      onSubmitted: (value) => _onSearch(value),
       style: TextStyle(
         fontSize: 20.0,
         color: Colors.blueAccent,
@@ -44,12 +45,7 @@ class _RoundedSearchFieldState extends State<RoundedSearchField> {
             Icons.arrow_right,
             size: 35.0,
           ),
-          onPressed: () {
-            widget.onSearch(_searchController.text);
-            WidgetsBinding.instance
-                .addPostFrameCallback((_) => _searchController.clear());
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
+          onPressed: () => _onSearch(_searchController.text),
         ),
         contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
         prefixIcon: Icon(Icons.search),

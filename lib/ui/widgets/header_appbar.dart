@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:urban_dict_slang/core/services/db/database.dart';
-import 'package:urban_dict_slang/core/viewmodels/widgets/favorite_button_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
 
 import 'package:urban_dict_slang/ui/shared/text_styles.dart' as textStyles;
 import 'package:urban_dict_slang/ui/shared/app_colors.dart' as appColors;
-import 'package:urban_dict_slang/ui/views/base_widget.dart';
 
 class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const HeaderAppBar({Key key, this.term, this.onInfoButtonPress, this.child})
+  const HeaderAppBar({Key key, this.onInfoButtonPress, this.child})
       : super(key: key);
 
   final Function onInfoButtonPress;
-  final String term;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    Term term = Provider.of<Term>(context);
     return Container(
       height: 210.0,
       padding: EdgeInsets.only(bottom: 15.0),
@@ -38,34 +34,46 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: onInfoButtonPress,
                 icon: Icon(Icons.info_outline, color: Colors.white, size: 35),
               ),
-              BaseWidget<FavoriteButtonModel>(
-                  model:
-                      FavoriteButtonModel(termRepository: Provider.of(context)),
-                  builder: (context, model, child) {
-                    if (term == null)
-                      return IconButton(
-                        icon: Icon(Icons.star_border,
-                            color: Colors.white, size: 35),
-                        onPressed: () {},
-                      );
-                    return IconButton(
-                      onPressed: () =>
-                          model.toggleFavorite(Provider.of<Term>(context)),
-                      icon: Icon(
-                          term.isFavorite ? Icons.star : Icons.star_border,
-                          color: Colors.white,
-                          size: 35),
-                    );
-                  }),
+              BlocBuilder<TermBloc, TermState>(builder: (context, state) {
+                IconButton iconButton;
+                if (state is InitialTermState) {
+                  iconButton = IconButton(
+                    icon:
+                        Icon(Icons.star_border, color: Colors.white, size: 35),
+                    onPressed: () {},
+                  );
+                } else if (state is TermChanged) {
+                  bool isFav = state.term.isFavorite;
+                  IconData icon = isFav ? Icons.star : Icons.star_border;
+                  iconButton = IconButton(
+                    onPressed: () {
+                      BlocProvider.of<TermBloc>(context)
+                          .add(ToggleFavorite(state.term));
+                    },
+                    icon: Icon(icon, color: Colors.white, size: 35),
+                  );
+                }
+                return iconButton;
+              }),
             ],
           ),
           SizedBox(
             height: 10.0,
           ),
-          Text(
-            term == null ? 'Urban Dictionary' : term.term,
-            textAlign: TextAlign.center,
-            style: textStyles.termHeaderStyle,
+          BlocBuilder<TermBloc, TermState>(
+            builder: (context, state) {
+              String text;
+              if (state is InitialTermState) {
+                text = 'Urban Dictionary';
+              } else if (state is TermChanged) {
+                text = state.term.term;
+              }
+              return Text(
+                text,
+                textAlign: TextAlign.center,
+                style: textStyles.termHeaderStyle,
+              );
+            },
           ),
           Container(
             margin: EdgeInsets.only(top: 15.0),

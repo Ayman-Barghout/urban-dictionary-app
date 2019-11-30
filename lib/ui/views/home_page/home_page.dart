@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:urban_dict_slang/core/blocs/favorited_terms_bloc/bloc.dart';
+import 'package:urban_dict_slang/core/blocs/terms_history_bloc/bloc.dart';
 
 import 'package:urban_dict_slang/ui/shared/app_colors.dart' as customColors;
 import 'package:urban_dict_slang/ui/views/home_page/search_view.dart';
@@ -27,6 +30,11 @@ class _HomePageState extends State<HomePage> {
       ];
 
   void updateIndex(int i) {
+    if (i == 0) {
+      BlocProvider.of<TermsHistoryBloc>(context).add(LoadTermsHistory());
+    } else if (i == 2) {
+      BlocProvider.of<FavoritedTermsBloc>(context).add(LoadFavoritedTerms());
+    }
     setState(() {
       _selectedIndex = i;
     });

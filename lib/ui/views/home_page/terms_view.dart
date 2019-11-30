@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:urban_dict_slang/core/viewmodels/views/terms_view_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:urban_dict_slang/core/blocs/terms_history_bloc/bloc.dart';
 
 import 'package:urban_dict_slang/ui/shared/text_styles.dart' as textStyles;
 import 'package:urban_dict_slang/ui/shared/app_colors.dart' as customColors;
-import 'package:urban_dict_slang/ui/views/base_widget.dart';
-import 'package:urban_dict_slang/ui/widgets/terms_list.dart';
+import 'package:urban_dict_slang/ui/widgets/terms_list_headers.dart';
 
 class TermsView extends StatelessWidget {
   const TermsView({Key key, this.changeIndex}) : super(key: key);
@@ -29,12 +28,9 @@ class TermsView extends StatelessWidget {
               ),
             ),
           ),
-          BaseWidget<TermsViewModel>(
-            model: TermsViewModel(termsRepository: Provider.of(context)),
-            onModelReady: (model) => model.fetchTerms(),
-            builder: (context, model, child) => Expanded(
-              flex: 2,
-              child: Container(
+          Expanded(
+            flex: 2,
+            child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
                 margin: EdgeInsets.only(top: 5.0),
                 decoration: BoxDecoration(
@@ -44,16 +40,30 @@ class TermsView extends StatelessWidget {
                     topRight: Radius.circular(20.0),
                   ),
                 ),
-                child: model.busy
-                    ? Center(
+                child: BlocBuilder<TermsHistoryBloc, TermsHistoryState>(
+                  builder: (context, state) {
+                    if (state is TermsHistoryLoading) {
+                      return Center(
                         child: CircularProgressIndicator(),
-                      )
-                    : model.message == null
-                        ? TermsListWithHeaders(changeIndex: changeIndex)
-                        : Center(child: Text(model.message)),
-              ),
-            ),
-          )
+                      );
+                    } else if (state is TermsHistoryEmpty) {
+                      return Center(
+                        child: Text(
+                          state.message,
+                          style: textStyles.definitionStyle,
+                          textAlign: TextAlign.center,
+                          softWrap: true,
+                        ),
+                      );
+                    } else if (state is TermsHistoryLoaded) {
+                      return TermsListWithHeaders(
+                        changeIndex: changeIndex,
+                        termsHistory: state.termsHistory,
+                      );
+                    }
+                  },
+                )),
+          ),
         ],
       ),
     );
