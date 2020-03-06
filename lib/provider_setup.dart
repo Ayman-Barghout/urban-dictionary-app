@@ -9,12 +9,21 @@ import 'package:urban_dict_slang/core/services/repository/term_definitions_repos
 import 'package:urban_dict_slang/core/services/repository/terms_repository.dart';
 
 List<RepositoryProvider> repositoryProviders = [
+  RepositoryProvider<HttpApi>(
+    create: (context) => HttpApi(),
+  ),
+  RepositoryProvider<AppDatabase>(
+    create: (context) => AppDatabase(),
+  ),
   RepositoryProvider<TermDefinitionsRepository>(
-    create: (context) => TermDefinitionsRepository(AppDatabase(), HttpApi()),
+    create: (context) => TermDefinitionsRepository(
+      RepositoryProvider.of<AppDatabase>(context),
+      RepositoryProvider.of<HttpApi>(context),
+    ),
   ),
   RepositoryProvider<TermsRepository>(
     create: (context) => TermsRepository(
-      AppDatabase(),
+      RepositoryProvider.of<AppDatabase>(context),
     ),
   )
 ];

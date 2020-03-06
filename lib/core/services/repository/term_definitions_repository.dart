@@ -73,14 +73,8 @@ class TermDefinitionsRepository {
     else if (apiDefinitions.length == 0) {
       return apiDefinitions;
     }
-    // Connected but no data in db (inset new data into db)
-    else if (dbDefinitions.length == 0) {
-      await db.definitionsDao.insertDefinitions(modifiedTerm, apiDefinitions);
-      return apiDefinitions;
-    }
     // Connected and there is data in db (update data in db)
     else {
-      await db.definitionsDao.deleteDefinitions(modifiedTerm);
       await db.definitionsDao.insertDefinitions(modifiedTerm, apiDefinitions);
       return apiDefinitions;
     }

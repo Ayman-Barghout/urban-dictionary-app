@@ -9,7 +9,9 @@ class Definitions extends Table {
   TextColumn get definition => text()();
   TextColumn get example => text()();
   TextColumn get author => text()();
+  @JsonKey('thumbs_up')
   IntColumn get thumbsUp => integer().named('thumbs_up')();
+  @JsonKey('thumbs_down')
   IntColumn get thumbsDown => integer().named('thumbs_down')();
 }
 
@@ -96,21 +98,27 @@ class DefinitionsDao extends DatabaseAccessor<AppDatabase>
     await (delete(definitions)..where((d) => d.term.equals(term))).go();
   }
 
-  Future insertDefinitions(
-          String term, List<Definition> newDefinitions) async =>
-      await batch((batch) {
-        batch.insertAll(
-            definitions,
-            newDefinitions
-                .map((d) => Definition(
-                      id: d.id,
-                      term: term,
-                      example: d.example,
-                      thumbsDown: d.thumbsDown,
-                      thumbsUp: d.thumbsUp,
-                      definition: d.definition,
-                      author: d.author,
-                    ))
-                .toList());
-      });
+  Future insertDefinitions(String term, List<Definition> newDefinitions) async {
+    final definitionsToInsert = newDefinitions
+        .map((d) => Definition(
+              id: d.id,
+              term: term,
+              example: d.example,
+              thumbsDown: d.thumbsDown,
+              thumbsUp: d.thumbsUp,
+              definition: d.definition,
+              author: d.author,
+            ))
+        .toList();
+    await batch((batch) {
+      print('batch started');
+      try {
+        batch.insertAll(definitions, definitionsToInsert,
+            mode: InsertMode.insertOrReplace);
+      } catch (e) {
+        print(e);
+      }
+    });
+    print('batch ended');
+  }
 }

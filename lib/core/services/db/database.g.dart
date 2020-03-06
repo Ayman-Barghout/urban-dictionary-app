@@ -258,8 +258,8 @@ class Definition extends DataClass implements Insertable<Definition> {
       definition: serializer.fromJson<String>(json['definition']),
       example: serializer.fromJson<String>(json['example']),
       author: serializer.fromJson<String>(json['author']),
-      thumbsUp: serializer.fromJson<int>(json['thumbsUp']),
-      thumbsDown: serializer.fromJson<int>(json['thumbsDown']),
+      thumbsUp: serializer.fromJson<int>(json['thumbs_up']),
+      thumbsDown: serializer.fromJson<int>(json['thumbs_down']),
     );
   }
   @override
@@ -271,8 +271,8 @@ class Definition extends DataClass implements Insertable<Definition> {
       'definition': serializer.toJson<String>(definition),
       'example': serializer.toJson<String>(example),
       'author': serializer.toJson<String>(author),
-      'thumbsUp': serializer.toJson<int>(thumbsUp),
-      'thumbsDown': serializer.toJson<int>(thumbsDown),
+      'thumbs_up': serializer.toJson<int>(thumbsUp),
+      'thumbs_down': serializer.toJson<int>(thumbsDown),
     };
   }
 
