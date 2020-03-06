@@ -16,18 +16,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final controller = PageController(initialPage: 1);
   int _selectedIndex = 1;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  List<Widget> _buildChildren() => <Widget>[
-        TermsView(
-          changeIndex: updateIndex,
-        ),
-        SearchView(),
-        FavoritesView(
-          changeIndex: updateIndex,
-        ),
-      ];
 
   void updateIndex(int i) {
     if (i == 0) {
@@ -35,6 +27,8 @@ class _HomePageState extends State<HomePage> {
     } else if (i == 2) {
       BlocProvider.of<FavoritedTermsBloc>(context).add(LoadFavoritedTerms());
     }
+    controller.animateToPage(i,
+        duration: Duration(milliseconds: 500), curve: Curves.ease);
     setState(() {
       _selectedIndex = i;
     });
@@ -42,14 +36,22 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> children = _buildChildren();
-
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
         color: Colors.white,
-        child: Center(
-          child: children.elementAt(_selectedIndex),
+        child: PageView(
+          onPageChanged: (index) => updateIndex(index),
+          controller: controller,
+          children: <Widget>[
+            TermsView(
+              changeIndex: updateIndex,
+            ),
+            SearchView(),
+            FavoritesView(
+              changeIndex: updateIndex,
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

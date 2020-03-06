@@ -35,23 +35,22 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
                 icon: Icon(Icons.info_outline, color: Colors.white, size: 35),
               ),
               BlocBuilder<TermBloc, TermState>(builder: (context, state) {
-                IconButton iconButton;
-                if (state is InitialTermState) {
-                  iconButton = IconButton(
-                    icon:
-                        Icon(Icons.star_border, color: Colors.white, size: 35),
-                    onPressed: () {},
-                  );
-                } else if (state is TermChanged) {
-                  bool isFav = state.term.isFavorite;
-                  IconData icon = isFav ? Icons.star : Icons.star_border;
-                  iconButton = IconButton(
-                    onPressed: () {
-                      BlocProvider.of<TermBloc>(context)
-                          .add(ToggleFavorite(state.term));
-                    },
-                    icon: Icon(icon, color: Colors.white, size: 35),
-                  );
+                IconButton iconButton = IconButton(
+                  icon: Icon(Icons.star_border, color: Colors.white, size: 35),
+                  onPressed: () {},
+                );
+                if (state is TermChanged) {
+                  if (state.term != null) {
+                    bool isFav = state.term.isFavorite;
+                    IconData icon = isFav ? Icons.star : Icons.star_border;
+                    iconButton = IconButton(
+                      onPressed: () {
+                        BlocProvider.of<TermBloc>(context)
+                            .add(ToggleFavorite(state.term));
+                      },
+                      icon: Icon(icon, color: Colors.white, size: 35),
+                    );
+                  }
                 }
                 return iconButton;
               }),

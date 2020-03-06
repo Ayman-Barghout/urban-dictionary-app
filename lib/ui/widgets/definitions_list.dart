@@ -54,6 +54,8 @@ class DefinitionsList extends StatelessWidget {
               style: textStyles.definitionStyle,
             ),
           );
+        } else {
+          return Container();
         }
       },
     );

@@ -14,8 +14,7 @@ class RoundedSearchField extends StatefulWidget {
 }
 
 class _RoundedSearchFieldState extends State<RoundedSearchField> {
-  TextEditingController _searchController;
-  String _searchText = '';
+  TextEditingController _searchController = TextEditingController();
 
   void _onSearch(String term) {
     BlocProvider.of<TermBloc>(context).add(ChangeTerm(newTerm: term));
@@ -59,17 +58,6 @@ class _RoundedSearchFieldState extends State<RoundedSearchField> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _searchController = TextEditingController();
-    _searchController.addListener(() {
-      setState(() {
-        _searchText = _searchController.text;
-      });
-    });
   }
 
   @override

@@ -60,6 +60,10 @@ class TermsView extends StatelessWidget {
                         changeIndex: changeIndex,
                         termsHistory: state.termsHistory,
                       );
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
                   },
                 )),

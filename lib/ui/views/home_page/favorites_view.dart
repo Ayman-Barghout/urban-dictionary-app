@@ -113,6 +113,10 @@ class FavoritesView extends StatelessWidget {
                           );
                         },
                       );
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
                   },
                 )),

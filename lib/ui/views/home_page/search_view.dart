@@ -30,36 +30,39 @@ class SearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: customColors.primaryColorLight,
-      padding: EdgeInsets.only(top: 25.0),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 8,
-            child: HeaderAppBar(
-              child: RoundedSearchField(),
-              onInfoButtonPress: () => showAbout(context),
-            ),
-          ),
-          Expanded(
-            flex: 10,
-            child: Container(
-              color: customColors.primaryColor,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    topRight: Radius.circular(20.0),
-                  ),
-                ),
-                child: DefinitionsList(),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: customColors.primaryColorLight,
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 8,
+              child: HeaderAppBar(
+                child: RoundedSearchField(),
+                onInfoButtonPress: () => showAbout(context),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              flex: 10,
+              child: Container(
+                color: customColors.primaryColor,
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0),
+                    ),
+                  ),
+                  child: DefinitionsList(),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
