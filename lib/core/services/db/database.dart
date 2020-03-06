@@ -111,14 +111,10 @@ class DefinitionsDao extends DatabaseAccessor<AppDatabase>
             ))
         .toList();
     await batch((batch) {
-      print('batch started');
       try {
         batch.insertAll(definitions, definitionsToInsert,
             mode: InsertMode.insertOrReplace);
-      } catch (e) {
-        print(e);
-      }
+      } catch (e) {}
     });
-    print('batch ended');
   }
 }
