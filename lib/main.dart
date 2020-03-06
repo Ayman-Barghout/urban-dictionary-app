@@ -7,6 +7,7 @@ import 'package:urban_dict_slang/ui/shared/app_colors.dart' as appColors;
 import 'package:urban_dict_slang/ui/views/home_page/home_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(UrbanDictApp());

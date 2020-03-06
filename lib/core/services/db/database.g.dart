@@ -30,7 +30,8 @@ class Term extends DataClass implements Insertable<Term> {
     );
   }
   factory Term.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return Term(
       term: serializer.fromJson<String>(json['term']),
       lastViewed: serializer.fromJson<DateTime>(json['lastViewed']),
@@ -38,9 +39,9 @@ class Term extends DataClass implements Insertable<Term> {
     );
   }
   @override
-  Map<String, dynamic> toJson(
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
-    return {
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
       'term': serializer.toJson<String>(term),
       'lastViewed': serializer.toJson<DateTime>(lastViewed),
       'isFavorite': serializer.toJson<bool>(isFavorite),
@@ -79,7 +80,7 @@ class Term extends DataClass implements Insertable<Term> {
   int get hashCode => $mrjf(
       $mrjc(term.hashCode, $mrjc(lastViewed.hashCode, isFavorite.hashCode)));
   @override
-  bool operator ==(other) =>
+  bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Term &&
           other.term == this.term &&
@@ -167,20 +168,18 @@ class $TermsTable extends Terms with TableInfo<$TermsTable, Term> {
     if (d.term.present) {
       context.handle(
           _termMeta, term.isAcceptableValue(d.term.value, _termMeta));
-    } else if (term.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_termMeta);
     }
     if (d.lastViewed.present) {
       context.handle(_lastViewedMeta,
           lastViewed.isAcceptableValue(d.lastViewed.value, _lastViewedMeta));
-    } else if (lastViewed.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_lastViewedMeta);
     }
     if (d.isFavorite.present) {
       context.handle(_isFavoriteMeta,
           isFavorite.isAcceptableValue(d.isFavorite.value, _isFavoriteMeta));
-    } else if (isFavorite.isRequired && isInserting) {
-      context.missing(_isFavoriteMeta);
     }
     return context;
   }
@@ -220,16 +219,16 @@ class Definition extends DataClass implements Insertable<Definition> {
   final String definition;
   final String example;
   final String author;
-  final int thumbs_up;
-  final int thumbs_down;
+  final int thumbsUp;
+  final int thumbsDown;
   Definition(
       {@required this.id,
       @required this.term,
       @required this.definition,
       @required this.example,
       @required this.author,
-      @required this.thumbs_up,
-      @required this.thumbs_down});
+      @required this.thumbsUp,
+      @required this.thumbsDown});
   factory Definition.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -244,35 +243,36 @@ class Definition extends DataClass implements Insertable<Definition> {
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}example']),
       author:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}author']),
-      thumbs_up:
+      thumbsUp:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}thumbs_up']),
-      thumbs_down: intType
+      thumbsDown: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}thumbs_down']),
     );
   }
   factory Definition.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return Definition(
       id: serializer.fromJson<int>(json['id']),
       term: serializer.fromJson<String>(json['term']),
       definition: serializer.fromJson<String>(json['definition']),
       example: serializer.fromJson<String>(json['example']),
       author: serializer.fromJson<String>(json['author']),
-      thumbs_up: serializer.fromJson<int>(json['thumbs_up']),
-      thumbs_down: serializer.fromJson<int>(json['thumbs_down']),
+      thumbsUp: serializer.fromJson<int>(json['thumbsUp']),
+      thumbsDown: serializer.fromJson<int>(json['thumbsDown']),
     );
   }
   @override
-  Map<String, dynamic> toJson(
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
-    return {
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'term': serializer.toJson<String>(term),
       'definition': serializer.toJson<String>(definition),
       'example': serializer.toJson<String>(example),
       'author': serializer.toJson<String>(author),
-      'thumbs_up': serializer.toJson<int>(thumbs_up),
-      'thumbs_down': serializer.toJson<int>(thumbs_down),
+      'thumbsUp': serializer.toJson<int>(thumbsUp),
+      'thumbsDown': serializer.toJson<int>(thumbsDown),
     };
   }
 
@@ -289,12 +289,12 @@ class Definition extends DataClass implements Insertable<Definition> {
           : Value(example),
       author:
           author == null && nullToAbsent ? const Value.absent() : Value(author),
-      thumbs_up: thumbs_up == null && nullToAbsent
+      thumbsUp: thumbsUp == null && nullToAbsent
           ? const Value.absent()
-          : Value(thumbs_up),
-      thumbs_down: thumbs_down == null && nullToAbsent
+          : Value(thumbsUp),
+      thumbsDown: thumbsDown == null && nullToAbsent
           ? const Value.absent()
-          : Value(thumbs_down),
+          : Value(thumbsDown),
     );
   }
 
@@ -304,16 +304,16 @@ class Definition extends DataClass implements Insertable<Definition> {
           String definition,
           String example,
           String author,
-          int thumbs_up,
-          int thumbs_down}) =>
+          int thumbsUp,
+          int thumbsDown}) =>
       Definition(
         id: id ?? this.id,
         term: term ?? this.term,
         definition: definition ?? this.definition,
         example: example ?? this.example,
         author: author ?? this.author,
-        thumbs_up: thumbs_up ?? this.thumbs_up,
-        thumbs_down: thumbs_down ?? this.thumbs_down,
+        thumbsUp: thumbsUp ?? this.thumbsUp,
+        thumbsDown: thumbsDown ?? this.thumbsDown,
       );
   @override
   String toString() {
@@ -323,8 +323,8 @@ class Definition extends DataClass implements Insertable<Definition> {
           ..write('definition: $definition, ')
           ..write('example: $example, ')
           ..write('author: $author, ')
-          ..write('thumbs_up: $thumbs_up, ')
-          ..write('thumbs_down: $thumbs_down')
+          ..write('thumbsUp: $thumbsUp, ')
+          ..write('thumbsDown: $thumbsDown')
           ..write(')'))
         .toString();
   }
@@ -339,9 +339,9 @@ class Definition extends DataClass implements Insertable<Definition> {
               $mrjc(
                   example.hashCode,
                   $mrjc(author.hashCode,
-                      $mrjc(thumbs_up.hashCode, thumbs_down.hashCode)))))));
+                      $mrjc(thumbsUp.hashCode, thumbsDown.hashCode)))))));
   @override
-  bool operator ==(other) =>
+  bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Definition &&
           other.id == this.id &&
@@ -349,8 +349,8 @@ class Definition extends DataClass implements Insertable<Definition> {
           other.definition == this.definition &&
           other.example == this.example &&
           other.author == this.author &&
-          other.thumbs_up == this.thumbs_up &&
-          other.thumbs_down == this.thumbs_down);
+          other.thumbsUp == this.thumbsUp &&
+          other.thumbsDown == this.thumbsDown);
 }
 
 class DefinitionsCompanion extends UpdateCompanion<Definition> {
@@ -359,16 +359,16 @@ class DefinitionsCompanion extends UpdateCompanion<Definition> {
   final Value<String> definition;
   final Value<String> example;
   final Value<String> author;
-  final Value<int> thumbs_up;
-  final Value<int> thumbs_down;
+  final Value<int> thumbsUp;
+  final Value<int> thumbsDown;
   const DefinitionsCompanion({
     this.id = const Value.absent(),
     this.term = const Value.absent(),
     this.definition = const Value.absent(),
     this.example = const Value.absent(),
     this.author = const Value.absent(),
-    this.thumbs_up = const Value.absent(),
-    this.thumbs_down = const Value.absent(),
+    this.thumbsUp = const Value.absent(),
+    this.thumbsDown = const Value.absent(),
   });
   DefinitionsCompanion.insert({
     this.id = const Value.absent(),
@@ -376,30 +376,30 @@ class DefinitionsCompanion extends UpdateCompanion<Definition> {
     @required String definition,
     @required String example,
     @required String author,
-    @required int thumbs_up,
-    @required int thumbs_down,
+    @required int thumbsUp,
+    @required int thumbsDown,
   })  : term = Value(term),
         definition = Value(definition),
         example = Value(example),
         author = Value(author),
-        thumbs_up = Value(thumbs_up),
-        thumbs_down = Value(thumbs_down);
+        thumbsUp = Value(thumbsUp),
+        thumbsDown = Value(thumbsDown);
   DefinitionsCompanion copyWith(
       {Value<int> id,
       Value<String> term,
       Value<String> definition,
       Value<String> example,
       Value<String> author,
-      Value<int> thumbs_up,
-      Value<int> thumbs_down}) {
+      Value<int> thumbsUp,
+      Value<int> thumbsDown}) {
     return DefinitionsCompanion(
       id: id ?? this.id,
       term: term ?? this.term,
       definition: definition ?? this.definition,
       example: example ?? this.example,
       author: author ?? this.author,
-      thumbs_up: thumbs_up ?? this.thumbs_up,
-      thumbs_down: thumbs_down ?? this.thumbs_down,
+      thumbsUp: thumbsUp ?? this.thumbsUp,
+      thumbsDown: thumbsDown ?? this.thumbsDown,
     );
   }
 }
@@ -466,10 +466,10 @@ class $DefinitionsTable extends Definitions
     );
   }
 
-  final VerificationMeta _thumbs_upMeta = const VerificationMeta('thumbs_up');
-  GeneratedIntColumn _thumbs_up;
+  final VerificationMeta _thumbsUpMeta = const VerificationMeta('thumbsUp');
+  GeneratedIntColumn _thumbsUp;
   @override
-  GeneratedIntColumn get thumbs_up => _thumbs_up ??= _constructThumbsUp();
+  GeneratedIntColumn get thumbsUp => _thumbsUp ??= _constructThumbsUp();
   GeneratedIntColumn _constructThumbsUp() {
     return GeneratedIntColumn(
       'thumbs_up',
@@ -478,11 +478,10 @@ class $DefinitionsTable extends Definitions
     );
   }
 
-  final VerificationMeta _thumbs_downMeta =
-      const VerificationMeta('thumbs_down');
-  GeneratedIntColumn _thumbs_down;
+  final VerificationMeta _thumbsDownMeta = const VerificationMeta('thumbsDown');
+  GeneratedIntColumn _thumbsDown;
   @override
-  GeneratedIntColumn get thumbs_down => _thumbs_down ??= _constructThumbsDown();
+  GeneratedIntColumn get thumbsDown => _thumbsDown ??= _constructThumbsDown();
   GeneratedIntColumn _constructThumbsDown() {
     return GeneratedIntColumn(
       'thumbs_down',
@@ -493,7 +492,7 @@ class $DefinitionsTable extends Definitions
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, term, definition, example, author, thumbs_up, thumbs_down];
+      [id, term, definition, example, author, thumbsUp, thumbsDown];
   @override
   $DefinitionsTable get asDslTable => this;
   @override
@@ -506,44 +505,42 @@ class $DefinitionsTable extends Definitions
     final context = VerificationContext();
     if (d.id.present) {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
-    } else if (id.isRequired && isInserting) {
-      context.missing(_idMeta);
     }
     if (d.term.present) {
       context.handle(
           _termMeta, term.isAcceptableValue(d.term.value, _termMeta));
-    } else if (term.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_termMeta);
     }
     if (d.definition.present) {
       context.handle(_definitionMeta,
           definition.isAcceptableValue(d.definition.value, _definitionMeta));
-    } else if (definition.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_definitionMeta);
     }
     if (d.example.present) {
       context.handle(_exampleMeta,
           example.isAcceptableValue(d.example.value, _exampleMeta));
-    } else if (example.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_exampleMeta);
     }
     if (d.author.present) {
       context.handle(
           _authorMeta, author.isAcceptableValue(d.author.value, _authorMeta));
-    } else if (author.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_authorMeta);
     }
-    if (d.thumbs_up.present) {
-      context.handle(_thumbs_upMeta,
-          thumbs_up.isAcceptableValue(d.thumbs_up.value, _thumbs_upMeta));
-    } else if (thumbs_up.isRequired && isInserting) {
-      context.missing(_thumbs_upMeta);
+    if (d.thumbsUp.present) {
+      context.handle(_thumbsUpMeta,
+          thumbsUp.isAcceptableValue(d.thumbsUp.value, _thumbsUpMeta));
+    } else if (isInserting) {
+      context.missing(_thumbsUpMeta);
     }
-    if (d.thumbs_down.present) {
-      context.handle(_thumbs_downMeta,
-          thumbs_down.isAcceptableValue(d.thumbs_down.value, _thumbs_downMeta));
-    } else if (thumbs_down.isRequired && isInserting) {
-      context.missing(_thumbs_downMeta);
+    if (d.thumbsDown.present) {
+      context.handle(_thumbsDownMeta,
+          thumbsDown.isAcceptableValue(d.thumbsDown.value, _thumbsDownMeta));
+    } else if (isInserting) {
+      context.missing(_thumbsDownMeta);
     }
     return context;
   }
@@ -574,11 +571,11 @@ class $DefinitionsTable extends Definitions
     if (d.author.present) {
       map['author'] = Variable<String, StringType>(d.author.value);
     }
-    if (d.thumbs_up.present) {
-      map['thumbs_up'] = Variable<int, IntType>(d.thumbs_up.value);
+    if (d.thumbsUp.present) {
+      map['thumbs_up'] = Variable<int, IntType>(d.thumbsUp.value);
     }
-    if (d.thumbs_down.present) {
-      map['thumbs_down'] = Variable<int, IntType>(d.thumbs_down.value);
+    if (d.thumbsDown.present) {
+      map['thumbs_down'] = Variable<int, IntType>(d.thumbsDown.value);
     }
     return map;
   }
@@ -601,7 +598,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   DefinitionsDao get definitionsDao =>
       _definitionsDao ??= DefinitionsDao(this as AppDatabase);
   @override
-  List<TableInfo> get allTables => [terms, definitions];
+  Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+  @override
+  List<DatabaseSchemaEntity> get allSchemaEntities => [terms, definitions];
 }
 
 // **************************************************************************

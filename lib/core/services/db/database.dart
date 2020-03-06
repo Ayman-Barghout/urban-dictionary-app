@@ -9,8 +9,8 @@ class Definitions extends Table {
   TextColumn get definition => text()();
   TextColumn get example => text()();
   TextColumn get author => text()();
-  IntColumn get thumbs_up => integer()();
-  IntColumn get thumbs_down => integer()();
+  IntColumn get thumbsUp => integer().named('thumbs_up')();
+  IntColumn get thumbsDown => integer().named('thumbs_down')();
 }
 
 class Terms extends Table {
@@ -35,7 +35,7 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
-        return m.createAllTables();
+        return m.createAll();
       }, onUpgrade: (Migrator m, int from, int to) async {
         if (from == 1) {}
       });
@@ -96,16 +96,21 @@ class DefinitionsDao extends DatabaseAccessor<AppDatabase>
     await (delete(definitions)..where((d) => d.term.equals(term))).go();
   }
 
-  Future insertDefinitions(String term, List<Definition> newDefinitions) =>
-      into(definitions).insertAll(newDefinitions
-          .map((d) => Definition(
-                id: d.id,
-                term: term,
-                example: d.example,
-                thumbs_down: d.thumbs_down,
-                thumbs_up: d.thumbs_up,
-                definition: d.definition,
-                author: d.author,
-              ))
-          .toList());
+  Future insertDefinitions(
+          String term, List<Definition> newDefinitions) async =>
+      await batch((batch) {
+        batch.insertAll(
+            definitions,
+            newDefinitions
+                .map((d) => Definition(
+                      id: d.id,
+                      term: term,
+                      example: d.example,
+                      thumbsDown: d.thumbsDown,
+                      thumbsUp: d.thumbsUp,
+                      definition: d.definition,
+                      author: d.author,
+                    ))
+                .toList());
+      });
 }

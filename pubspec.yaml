@@ -24,7 +24,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   http: ^0.12.0+2
-  moor_flutter: ^2.0.0
+  moor_flutter: ^2.1.1
   flare_splash_screen: ^3.0.0
   sticky_headers: "^0.1.8"
   bloc: ^2.0.0
@@ -38,7 +38,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  moor_generator: ^2.0.1
+  moor_generator: ^2.4.0
   build_runner: ^1.7.1
   flutter_launcher_icons: "^0.7.3"
 
