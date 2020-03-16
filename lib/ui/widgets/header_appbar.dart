@@ -90,5 +90,5 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(150.0);
+  Size get preferredSize => const Size.fromHeight(155.0);
 }
