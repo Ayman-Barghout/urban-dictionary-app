@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:urban_dict_slang/core/blocs/terms_history_bloc/bloc.dart';
 
-import 'package:urban_dict_slang/ui/shared/text_styles.dart' as textStyles;
 import 'package:urban_dict_slang/ui/widgets/terms_list_headers.dart';
 
 class TermsView extends StatelessWidget {
@@ -22,7 +21,7 @@ class TermsView extends StatelessWidget {
               child: Center(
                 child: Text(
                   'History',
-                  style: textStyles.termHeaderStyle,
+                  style: Theme.of(context).textTheme.headline,
                 ),
               ),
             ),
@@ -33,7 +32,7 @@ class TermsView extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
                 margin: EdgeInsets.only(top: 5.0),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).backgroundColor,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20.0),
                     topRight: Radius.circular(20.0),
@@ -49,7 +48,7 @@ class TermsView extends StatelessWidget {
                       return Center(
                         child: Text(
                           state.message,
-                          style: textStyles.definitionStyle,
+                          style: Theme.of(context).textTheme.body1,
                           textAlign: TextAlign.center,
                           softWrap: true,
                         ),

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
 
-import 'package:urban_dict_slang/ui/shared/text_styles.dart' as textStyles;
-
 class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HeaderAppBar({Key key, this.onInfoButtonPress, this.child})
       : super(key: key);
@@ -88,7 +86,7 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
               return Text(
                 text,
                 textAlign: TextAlign.center,
-                style: textStyles.termHeaderStyle,
+                style: Theme.of(context).textTheme.headline,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               );

@@ -7,8 +7,6 @@ import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
 import 'package:urban_dict_slang/core/services/db/database.dart';
 import 'package:urban_dict_slang/core/services/repository/term_definitions_repository.dart';
 
-import 'package:urban_dict_slang/ui/shared/text_styles.dart' as textStyles;
-
 class FavoritesView extends StatelessWidget {
   const FavoritesView({Key key, this.changeIndex}) : super(key: key);
 
@@ -26,7 +24,7 @@ class FavoritesView extends StatelessWidget {
               child: Center(
                 child: Text(
                   'Favorites',
-                  style: textStyles.termHeaderStyle,
+                  style: Theme.of(context).textTheme.headline,
                 ),
               ),
             ),
@@ -37,7 +35,7 @@ class FavoritesView extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
                 margin: EdgeInsets.only(top: 5.0),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).backgroundColor,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20.0),
                     topRight: Radius.circular(20.0),
@@ -53,7 +51,7 @@ class FavoritesView extends StatelessWidget {
                       return Center(
                         child: Text(
                           state.message,
-                          style: textStyles.definitionStyle,
+                          style: Theme.of(context).textTheme.body1,
                           textAlign: TextAlign.center,
                           softWrap: true,
                         ),
@@ -75,7 +73,7 @@ class FavoritesView extends StatelessWidget {
                             title: Text(
                               favoriteTerm.term[0].toUpperCase() +
                                   favoriteTerm.term.substring(1),
-                              style: textStyles.definitionStyle,
+                              style: Theme.of(context).textTheme.body1,
                             ),
                             trailing: BlocBuilder<TermBloc, TermState>(
                                 builder: (context, state) {
@@ -104,7 +102,10 @@ class FavoritesView extends StatelessWidget {
                               return IconButton(
                                 icon: Icon(
                                   Icons.star,
-                                  color: Theme.of(context).accentColor,
+                                  color: Theme.of(context).backgroundColor ==
+                                          Colors.white
+                                      ? Theme.of(context).accentColor
+                                      : Colors.white.withOpacity(0.8),
                                 ),
                                 onPressed: _onPressed,
                               );

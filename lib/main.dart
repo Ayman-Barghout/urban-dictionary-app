@@ -27,6 +27,8 @@ class UrbanDictApp extends StatelessWidget {
     return MaterialApp(
       title: 'Urban Dictionary',
       theme: mainTheme,
+      themeMode: ThemeMode.dark,
+      darkTheme: darkTheme,
       routes: {
         '/': (context) => SplashScreen(
               'assets/flare/splash.flr',

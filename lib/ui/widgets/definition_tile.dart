@@ -13,7 +13,8 @@ class DefinitionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.0), color: Colors.white),
+          borderRadius: BorderRadius.circular(5.0),
+          color: Theme.of(context).backgroundColor),
       padding: EdgeInsets.all(10.0),
       margin: EdgeInsets.all(5.0),
       child: Column(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:urban_dict_slang/core/blocs/definitions_bloc/bloc.dart';
 import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
-import 'package:urban_dict_slang/ui/shared/text_styles.dart' as textStyles;
 import 'package:urban_dict_slang/ui/widgets/definition_tile.dart';
 
 class DefinitionsList extends StatelessWidget {
@@ -20,7 +19,7 @@ class DefinitionsList extends StatelessWidget {
               'Search for a slang or name to find its definitions',
               textAlign: TextAlign.center,
               softWrap: true,
-              style: textStyles.definitionStyle,
+              style: Theme.of(context).textTheme.body1,
             ),
           );
         } else if (state is DefinitionsLoading) {
@@ -29,8 +28,11 @@ class DefinitionsList extends StatelessWidget {
           );
         } else if (state is DefinitionsLoaded) {
           return Scrollbar(
-            child: ListView.builder(
+            child: ListView.separated(
               itemCount: state.definitions.length,
+              separatorBuilder: (BuildContext context, int index) => Divider(
+                color: Theme.of(context).cardColor,
+              ),
               itemBuilder: (BuildContext context, int index) {
                 return DefinitionTile(
                   definition: state.definitions[index],
@@ -51,7 +53,7 @@ class DefinitionsList extends StatelessWidget {
               state.message,
               textAlign: TextAlign.center,
               softWrap: true,
-              style: textStyles.definitionStyle,
+              style: Theme.of(context).textTheme.body1,
             ),
           );
         } else {

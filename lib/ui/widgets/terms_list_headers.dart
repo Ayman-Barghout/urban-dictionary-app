@@ -7,8 +7,6 @@ import 'package:urban_dict_slang/core/blocs/terms_history_bloc/bloc.dart';
 import 'package:urban_dict_slang/core/services/db/database.dart';
 import 'package:urban_dict_slang/core/services/repository/term_definitions_repository.dart';
 
-import 'package:urban_dict_slang/ui/shared/text_styles.dart' as textStyles;
-
 class TermsListWithHeaders extends StatelessWidget {
   final Function changeIndex;
   final Map<int, List<Term>> termsHistory;
@@ -80,7 +78,7 @@ class TermListTile extends StatelessWidget {
       },
       title: Text(
         instanceTerm.term[0].toUpperCase() + instanceTerm.term.substring(1),
-        style: textStyles.definitionStyle,
+        style: Theme.of(context).textTheme.body1,
       ),
       trailing: BlocBuilder<TermBloc, TermState>(builder: (context, state) {
         Future _deleteWithoutChanging() async {

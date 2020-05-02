@@ -52,7 +52,7 @@ class SearchView extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).backgroundColor,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20.0),
                 topRight: Radius.circular(20.0),

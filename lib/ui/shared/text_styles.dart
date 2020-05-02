@@ -33,7 +33,7 @@ const termHeaderStyleDark = TextStyle(
 );
 
 TextStyle definitionStyleDark = TextStyle(
-  color: Colors.blueGrey.shade900,
+  color: Colors.blueGrey.shade200,
   fontSize: 20.0,
 );
 
@@ -44,7 +44,7 @@ TextStyle tapDefinitionStyleDark = TextStyle(
 
 TextStyle exampleStyleDark = TextStyle(
   fontSize: 18.0,
-  color: Colors.blueGrey[700],
+  color: Colors.blueGrey[300],
 );
 
 TextStyle tapExampleStyleDark = TextStyle(
