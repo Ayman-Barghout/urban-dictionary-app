@@ -34,7 +34,8 @@ class _RoundedSearchFieldState extends State<RoundedSearchField> {
       onSubmitted: (value) => _onSearch(value),
       style: TextStyle(
         fontSize: 20.0,
-        color: Colors.blueAccent,
+        color: Theme.of(context).primaryColor,
+        decoration: TextDecoration.none,
       ),
       decoration: InputDecoration(
         filled: true,

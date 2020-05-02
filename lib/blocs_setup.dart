@@ -3,6 +3,7 @@ import 'package:urban_dict_slang/core/blocs/definitions_bloc/definitions_bloc.da
 import 'package:urban_dict_slang/core/blocs/favorited_terms_bloc/bloc.dart';
 import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
 import 'package:urban_dict_slang/core/blocs/terms_history_bloc/bloc.dart';
+import 'package:urban_dict_slang/core/blocs/theme_bloc/theme_bloc.dart';
 import 'package:urban_dict_slang/core/services/api/http_api.dart';
 import 'package:urban_dict_slang/core/services/db/database.dart';
 import 'package:urban_dict_slang/core/services/repository/term_definitions_repository.dart';
@@ -48,5 +49,8 @@ List<BlocProvider> blocProviders = [
     create: (context) => FavoritedTermsBloc(
       RepositoryProvider.of<TermsRepository>(context),
     ),
+  ),
+  BlocProvider<ThemeBloc>(
+    create: (context) => ThemeBloc(),
   ),
 ];

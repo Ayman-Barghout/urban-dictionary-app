@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _selectedIndex,
         backgroundColor: Theme.of(context).cardColor,
         unselectedItemColor: Theme.of(context).backgroundColor == Colors.white
-            ? Theme.of(context).primaryColor
+            ? Colors.grey.shade600
             : Colors.white.withOpacity(0.5),
         selectedItemColor: Theme.of(context).backgroundColor == Colors.white
             ? Theme.of(context).primaryColor
