@@ -45,7 +45,12 @@ class FavoritesView extends StatelessWidget {
                   builder: (context, state) {
                     if (state is FavoritedTermsLoading) {
                       return Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Theme.of(context).backgroundColor == Colors.white
+                                  ? Theme.of(context).accentColor
+                                  : Colors.white.withOpacity(0.8)),
+                        ),
                       );
                     } else if (state is FavoritesEmpty) {
                       return Center(
@@ -115,7 +120,12 @@ class FavoritesView extends StatelessWidget {
                       );
                     } else {
                       return Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Theme.of(context).backgroundColor == Colors.white
+                                  ? Theme.of(context).accentColor
+                                  : Colors.white.withOpacity(0.8)),
+                        ),
                       );
                     }
                   },

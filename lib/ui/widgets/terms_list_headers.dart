@@ -104,7 +104,7 @@ class TermListTile extends StatelessWidget {
         }
         return IconButton(
           icon: Icon(Icons.delete, color: Colors.red),
-          onPressed: _onPressed,
+          onPressed: () => _onPressed,
         );
       }),
     );

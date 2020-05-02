@@ -24,14 +24,21 @@ class DefinitionsList extends StatelessWidget {
           );
         } else if (state is DefinitionsLoading) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).backgroundColor == Colors.white
+                      ? Theme.of(context).accentColor
+                      : Colors.white.withOpacity(0.8)),
+            ),
           );
         } else if (state is DefinitionsLoaded) {
           return Scrollbar(
             child: ListView.separated(
               itemCount: state.definitions.length,
               separatorBuilder: (BuildContext context, int index) => Divider(
-                color: Theme.of(context).cardColor,
+                color: Theme.of(context).backgroundColor == Colors.white
+                    ? Colors.grey[500]
+                    : Theme.of(context).cardColor,
               ),
               itemBuilder: (BuildContext context, int index) {
                 return DefinitionTile(

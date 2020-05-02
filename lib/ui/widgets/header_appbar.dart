@@ -2,6 +2,7 @@ import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
+import 'package:urban_dict_slang/core/blocs/theme_bloc/theme_bloc.dart';
 
 class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HeaderAppBar({Key key, this.onInfoButtonPress, this.child})
@@ -41,10 +42,20 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
                     icon:
                         Icon(Icons.info_outline, color: Colors.white, size: 35),
                   ),
-                  DayNightSwitcherIcon(
-                    isDarkModeEnabled: false,
-                    dayBackgroundColor: Theme.of(context).accentColor,
-                    onStateChanged: (isDarkModeEnabled) {},
+                  const SizedBox(),
+                  BlocBuilder<ThemeBloc, ThemeState>(
+                    builder: (context, state) => DayNightSwitcherIcon(
+                      isDarkModeEnabled: state is ThemeInitial
+                          ? false
+                          : state is ThemeChanged && state.isDarkTheme
+                              ? true
+                              : false,
+                      dayBackgroundColor: Theme.of(context).accentColor,
+                      nightBackgroundColor: Theme.of(context).accentColor,
+                      onStateChanged: (isDarkModeEnabled) {
+                        BlocProvider.of<ThemeBloc>(context).add(ToggleTheme());
+                      },
+                    ),
                   ),
                 ],
               ),

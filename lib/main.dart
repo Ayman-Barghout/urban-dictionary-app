@@ -25,12 +25,8 @@ class UrbanDictApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ThemeBloc, ThemeState>(
-      listener: (context, state) {
-        if (state is ThemeInitial) {
-          BlocProvider.of<ThemeBloc>(context).add(InitiateTheme());
-        }
-      },
+    BlocProvider.of<ThemeBloc>(context).add(InitiateTheme());
+    return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) => MaterialApp(
         title: 'Urban Dictionary',
         theme: mainTheme,

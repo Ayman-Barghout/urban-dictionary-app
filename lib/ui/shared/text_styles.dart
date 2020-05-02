@@ -38,7 +38,7 @@ TextStyle definitionStyleDark = TextStyle(
 );
 
 TextStyle tapDefinitionStyleDark = TextStyle(
-  color: Colors.blue.shade900,
+  color: Colors.blueAccent[400],
   fontSize: 20.0,
 );
 
@@ -49,5 +49,5 @@ TextStyle exampleStyleDark = TextStyle(
 
 TextStyle tapExampleStyleDark = TextStyle(
   fontSize: 18.0,
-  color: Colors.blue[700],
+  color: Colors.lightBlue[300],
 );
