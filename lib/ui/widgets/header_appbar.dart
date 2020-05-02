@@ -66,11 +66,15 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
                 text = 'Urban Dictionary';
               } else if (state is TermChanged) {
                 text = state.term.term;
+              } else if (state is TermChangeStarted) {
+                text = state.term;
               }
               return Text(
                 text,
                 textAlign: TextAlign.center,
                 style: textStyles.termHeaderStyle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               );
             },
           ),

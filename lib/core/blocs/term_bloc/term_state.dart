@@ -10,6 +10,14 @@ class InitialTermState extends TermState {
   List<Object> get props => [];
 }
 
+class TermChangeStarted extends TermState {
+  final String term;
+
+  TermChangeStarted(this.term);
+  @override
+  List<Object> get props => [term];
+}
+
 class TermChanged extends TermState {
   final Term term;
 
