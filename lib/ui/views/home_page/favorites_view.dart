@@ -7,7 +7,6 @@ import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
 import 'package:urban_dict_slang/core/services/db/database.dart';
 import 'package:urban_dict_slang/core/services/repository/term_definitions_repository.dart';
 
-import 'package:urban_dict_slang/ui/shared/app_colors.dart' as customColors;
 import 'package:urban_dict_slang/ui/shared/text_styles.dart' as textStyles;
 
 class FavoritesView extends StatelessWidget {
@@ -18,7 +17,7 @@ class FavoritesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: customColors.primaryColor,
+      color: Theme.of(context).primaryColor,
       child: Column(
         children: <Widget>[
           Expanded(
@@ -105,7 +104,7 @@ class FavoritesView extends StatelessWidget {
                               return IconButton(
                                 icon: Icon(
                                   Icons.star,
-                                  color: customColors.primaryColorLight,
+                                  color: Theme.of(context).accentColor,
                                 ),
                                 onPressed: _onPressed,
                               );

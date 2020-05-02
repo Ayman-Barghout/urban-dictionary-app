@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 
-import 'package:urban_dict_slang/ui/shared/app_colors.dart' as customColors;
 import 'package:urban_dict_slang/ui/widgets/definitions_list.dart';
 import 'package:urban_dict_slang/ui/widgets/header_appbar.dart';
 import 'package:urban_dict_slang/ui/widgets/rounded_search_field.dart';
@@ -37,7 +36,7 @@ class SearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: customColors.primaryColorLight,
+      backgroundColor: Theme.of(context).accentColor,
       body: NestedScrollView(
         headerSliverBuilder: (_, __) => [
           SliverAppBar(
@@ -49,7 +48,7 @@ class SearchView extends StatelessWidget {
           ),
         ],
         body: Container(
-          color: customColors.primaryColor,
+          color: Theme.of(context).primaryColor,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             decoration: BoxDecoration(

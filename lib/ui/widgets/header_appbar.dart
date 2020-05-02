@@ -1,9 +1,9 @@
+import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
 
 import 'package:urban_dict_slang/ui/shared/text_styles.dart' as textStyles;
-import 'package:urban_dict_slang/ui/shared/app_colors.dart' as appColors;
 
 class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HeaderAppBar({Key key, this.onInfoButtonPress, this.child})
@@ -22,17 +22,33 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
         gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [appColors.primaryColorLight, appColors.primaryColor],
-            stops: [0.0001, 1.0]),
+            colors: [
+              Theme.of(context).accentColor,
+              Theme.of(context).primaryColor
+            ],
+            stops: [
+              0.0001,
+              1.0
+            ]),
       ),
       child: Column(
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              IconButton(
-                onPressed: onInfoButtonPress,
-                icon: Icon(Icons.info_outline, color: Colors.white, size: 35),
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: onInfoButtonPress,
+                    icon:
+                        Icon(Icons.info_outline, color: Colors.white, size: 35),
+                  ),
+                  DayNightSwitcherIcon(
+                    isDarkModeEnabled: false,
+                    dayBackgroundColor: Theme.of(context).accentColor,
+                    onStateChanged: (isDarkModeEnabled) {},
+                  ),
+                ],
               ),
               BlocBuilder<TermBloc, TermState>(builder: (context, state) {
                 IconButton iconButton = IconButton(

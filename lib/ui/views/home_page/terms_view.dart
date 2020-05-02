@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:urban_dict_slang/core/blocs/terms_history_bloc/bloc.dart';
 
 import 'package:urban_dict_slang/ui/shared/text_styles.dart' as textStyles;
-import 'package:urban_dict_slang/ui/shared/app_colors.dart' as customColors;
 import 'package:urban_dict_slang/ui/widgets/terms_list_headers.dart';
 
 class TermsView extends StatelessWidget {
@@ -14,7 +13,7 @@ class TermsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: customColors.primaryColor,
+      color: Theme.of(context).primaryColor,
       child: Column(
         children: <Widget>[
           Expanded(

@@ -7,7 +7,6 @@ import 'package:urban_dict_slang/core/blocs/terms_history_bloc/bloc.dart';
 import 'package:urban_dict_slang/core/services/db/database.dart';
 import 'package:urban_dict_slang/core/services/repository/term_definitions_repository.dart';
 
-import 'package:urban_dict_slang/ui/shared/app_colors.dart' as customColors;
 import 'package:urban_dict_slang/ui/shared/text_styles.dart' as textStyles;
 
 class TermsListWithHeaders extends StatelessWidget {
@@ -42,7 +41,7 @@ class TermsListWithHeaders extends StatelessWidget {
             ),
             padding: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
-              color: customColors.primaryColorLight,
+              color: Theme.of(context).accentColor,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10.0),
                 topRight: Radius.circular(10.0),

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:urban_dict_slang/core/blocs/favorited_terms_bloc/bloc.dart';
 import 'package:urban_dict_slang/core/blocs/terms_history_bloc/bloc.dart';
 
-import 'package:urban_dict_slang/ui/shared/app_colors.dart' as customColors;
 import 'package:urban_dict_slang/ui/views/home_page/search_view.dart';
 import 'package:urban_dict_slang/ui/views/home_page/terms_view.dart';
 import 'favorites_view.dart';
@@ -78,7 +77,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: customColors.primaryColor,
+        selectedItemColor: Theme.of(context).primaryColor,
         onTap: (i) {
           updateIndex(i);
         },
