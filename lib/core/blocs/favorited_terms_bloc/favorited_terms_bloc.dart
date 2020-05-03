@@ -19,9 +19,9 @@ class FavoritedTermsBloc
   ) async* {
     if (event is LoadFavoritedTerms) {
       yield FavoritedTermsLoading();
-      List<Term> favorites = await termsRepository.getAllFavorites();
-      if (favorites.length == 0) {
-        yield FavoritesEmpty(
+      final List<Term> favorites = await termsRepository.getAllFavorites();
+      if (favorites.isEmpty) {
+        yield const FavoritesEmpty(
             'No slangs favorited, favorite slangs to view them here');
       } else {
         yield FavoritedTermsLoaded(favorites);

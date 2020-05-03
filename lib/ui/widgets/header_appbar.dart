@@ -15,7 +15,7 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 210.0,
-      padding: EdgeInsets.only(bottom: 15.0),
+      padding: const EdgeInsets.only(bottom: 15.0),
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -25,7 +25,7 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
               Theme.of(context).accentColor,
               Theme.of(context).primaryColor
             ],
-            stops: [
+            stops: const [
               0.0001,
               1.0
             ]),
@@ -38,18 +38,17 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
               Row(
                 children: <Widget>[
                   IconButton(
-                    onPressed: onInfoButtonPress,
+                    onPressed: () {
+                      onInfoButtonPress();
+                    },
                     icon:
                         Icon(Icons.info_outline, color: Colors.white, size: 35),
                   ),
                   const SizedBox(),
                   BlocBuilder<ThemeBloc, ThemeState>(
                     builder: (context, state) => DayNightSwitcherIcon(
-                      isDarkModeEnabled: state is ThemeInitial
-                          ? false
-                          : state is ThemeChanged && state.isDarkTheme
-                              ? true
-                              : false,
+                      isDarkModeEnabled:
+                          state is ThemeChanged && state.isDarkTheme,
                       dayBackgroundColor: Theme.of(context).accentColor,
                       nightBackgroundColor: Theme.of(context).accentColor,
                       onStateChanged: (isDarkModeEnabled) {
@@ -66,8 +65,9 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
                 );
                 if (state is TermChanged) {
                   if (state.term != null) {
-                    bool isFav = state.term.isFavorite;
-                    IconData icon = isFav ? Icons.star : Icons.star_border;
+                    final bool isFav = state.term.isFavorite;
+                    final IconData icon =
+                        isFav ? Icons.star : Icons.star_border;
                     iconButton = IconButton(
                       onPressed: () {
                         BlocProvider.of<TermBloc>(context)
@@ -81,7 +81,7 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
               }),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10.0,
           ),
           BlocBuilder<TermBloc, TermState>(
@@ -104,9 +104,9 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
             },
           ),
           Container(
-            margin: EdgeInsets.only(top: 15.0),
+            margin: const EdgeInsets.only(top: 15.0),
             width: 250.0,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.horizontal(
                   left: Radius.circular(25.0), right: Radius.circular(25.0)),

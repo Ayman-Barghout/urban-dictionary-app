@@ -20,7 +20,7 @@ class FavoritesView extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: Container(
-              padding: EdgeInsets.only(top: 25.0),
+              padding: const EdgeInsets.only(top: 25.0),
               child: Center(
                 child: Text(
                   'Favorites',
@@ -32,11 +32,11 @@ class FavoritesView extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                margin: EdgeInsets.only(top: 5.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                margin: const EdgeInsets.only(top: 5.0),
                 decoration: BoxDecoration(
                   color: Theme.of(context).backgroundColor,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20.0),
                     topRight: Radius.circular(20.0),
                   ),
@@ -65,7 +65,7 @@ class FavoritesView extends StatelessWidget {
                       return ListView.builder(
                         itemCount: state.favorites.length,
                         itemBuilder: (BuildContext context, int index) {
-                          Term favoriteTerm = state.favorites[index];
+                          final Term favoriteTerm = state.favorites[index];
                           return ListTile(
                             onTap: () {
                               BlocProvider.of<TermBloc>(context).add(
@@ -112,7 +112,9 @@ class FavoritesView extends StatelessWidget {
                                       ? Theme.of(context).accentColor
                                       : Colors.white.withOpacity(0.8),
                                 ),
-                                onPressed: _onPressed,
+                                onPressed: () {
+                                  _onPressed();
+                                },
                               );
                             }),
                           );

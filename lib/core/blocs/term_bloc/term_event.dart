@@ -9,7 +9,7 @@ abstract class TermEvent extends Equatable {
 class DeleteTerm extends TermEvent {
   final Term term;
 
-  DeleteTerm(this.term);
+  const DeleteTerm(this.term);
   @override
   List<Object> get props => [term];
 }
@@ -17,7 +17,7 @@ class DeleteTerm extends TermEvent {
 class ToggleFavorite extends TermEvent {
   final Term term;
 
-  ToggleFavorite(this.term);
+  const ToggleFavorite(this.term);
   @override
   List<Object> get props => [term];
 }
@@ -25,7 +25,7 @@ class ToggleFavorite extends TermEvent {
 class ChangeTerm extends TermEvent {
   final String newTerm;
 
-  ChangeTerm({@required this.newTerm});
+  const ChangeTerm({@required this.newTerm});
 
   @override
   List<Object> get props => [newTerm];

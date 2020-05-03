@@ -17,7 +17,7 @@ class TermsView extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: Container(
-              padding: EdgeInsets.only(top: 25.0),
+              padding: const EdgeInsets.only(top: 25.0),
               child: Center(
                 child: Text(
                   'History',
@@ -29,11 +29,11 @@ class TermsView extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                margin: EdgeInsets.only(top: 5.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                margin: const EdgeInsets.only(top: 5.0),
                 decoration: BoxDecoration(
                   color: Theme.of(context).backgroundColor,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20.0),
                     topRight: Radius.circular(20.0),
                   ),

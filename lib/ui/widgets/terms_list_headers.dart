@@ -17,12 +17,12 @@ class TermsListWithHeaders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<int> days = termsHistory.keys.toList();
-    List<List<Term>> termsList = termsHistory.values.toList();
+    final List<int> days = termsHistory.keys.toList();
+    final List<List<Term>> termsList = termsHistory.values.toList();
     return ListView.builder(
       itemCount: days.length,
       itemBuilder: (context, index) {
-        List<Widget> termsWidgets = termsList[index]
+        final List<Widget> termsWidgets = termsList[index]
             .map((term) => TermListTile(
                   changeIndex: changeIndex,
                   instanceTerm: term,
@@ -31,20 +31,20 @@ class TermsListWithHeaders extends StatelessWidget {
         return StickyHeader(
           header: Container(
             width: double.infinity,
-            child: Text(
-              days[index] > 1
-                  ? '${days[index]} days ago'
-                  : days[index] == 0 ? 'Today' : 'Yesterday',
-              style: TextStyle(color: Colors.white, fontSize: 16.0),
-            ),
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
               color: Theme.of(context).accentColor,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10.0),
                 topRight: Radius.circular(10.0),
                 bottomLeft: Radius.circular(10.0),
               ),
+            ),
+            child: Text(
+              days[index] > 1
+                  ? '${days[index]} days ago'
+                  : days[index] == 0 ? 'Today' : 'Yesterday',
+              style: const TextStyle(color: Colors.white, fontSize: 16.0),
             ),
           ),
           content: Column(
@@ -104,7 +104,9 @@ class TermListTile extends StatelessWidget {
         }
         return IconButton(
           icon: Icon(Icons.delete, color: Colors.red),
-          onPressed: () => _onPressed,
+          onPressed: () {
+            _onPressed();
+          },
         );
       }),
     );

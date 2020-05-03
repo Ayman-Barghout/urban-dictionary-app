@@ -150,7 +150,7 @@ class $TermsTable extends Terms with TableInfo<$TermsTable, Term> {
   GeneratedBoolColumn get isFavorite => _isFavorite ??= _constructIsFavorite();
   GeneratedBoolColumn _constructIsFavorite() {
     return GeneratedBoolColumn('is_favorite', $tableName, false,
-        defaultValue: Constant(false));
+        defaultValue: const Constant(false));
   }
 
   @override

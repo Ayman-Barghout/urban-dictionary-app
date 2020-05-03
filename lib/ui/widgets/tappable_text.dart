@@ -11,12 +11,12 @@ class TappableText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> splitDef =
+    final List<String> splitDef =
         rawText.split(RegExp(r'(\s+(?=[\[\]]*(?:\[|\]))|])+'));
     return RichText(
       text: TextSpan(
         children: splitDef.map((word) {
-          if (word.length == 0) return TextSpan(text: '');
+          if (word.isEmpty) return const TextSpan(text: '');
           if (word[0] == '[') {
             return TextSpan(
               text: splitDef[0] == word

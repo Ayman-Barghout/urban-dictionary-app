@@ -17,18 +17,18 @@ class SearchView extends StatelessWidget {
         applicationVersion: '$versionNumber',
         applicationLegalese: 'Pocean Ltd.',
         children: <Widget>[
-          SizedBox(
+          const SizedBox(
             height: 5.0,
           ),
-          Text('Developer: Ayman Barghout'),
-          SizedBox(
+          const Text('Developer: Ayman Barghout'),
+          const SizedBox(
             height: 5.0,
           ),
-          Text('Art designer: Hagar Blue Sea'),
-          SizedBox(
+          const Text('Art designer: Hagar Blue Sea'),
+          const SizedBox(
             height: 5.0,
           ),
-          Text('Reviewers: KhatibFX, Enie Yujo'),
+          const Text('Reviewers: KhatibFX, Enie Yujo'),
         ]);
   }
 
@@ -42,23 +42,24 @@ class SearchView extends StatelessWidget {
           SliverAppBar(
             expandedHeight: 210,
             bottom: HeaderAppBar(
-              child: RoundedSearchField(),
               onInfoButtonPress: () => showAbout(context),
+              child: const RoundedSearchField(),
             ),
           ),
         ],
         body: Container(
           color: Theme.of(context).primaryColor,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             decoration: BoxDecoration(
               color: Theme.of(context).backgroundColor,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20.0),
                 topRight: Radius.circular(20.0),
               ),
             ),
-            child: DefinitionsList(),
+            child: const DefinitionsList(),
           ),
         ),
       ),

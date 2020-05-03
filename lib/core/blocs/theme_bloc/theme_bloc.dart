@@ -20,15 +20,15 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
 
     if (event is InitiateTheme) {
       if (isDark == null) {
-        yield ThemeChanged(false);
+        yield const ThemeChanged(isDarkTheme: false);
         prefs.setBool('isDarkTheme', false);
       } else {
-        yield ThemeChanged(isDark);
+        yield ThemeChanged(isDarkTheme: isDark);
       }
     }
     if (event is ToggleTheme) {
       prefs.setBool('isDarkTheme', !isDark);
-      yield ThemeChanged(!isDark);
+      yield ThemeChanged(isDarkTheme: !isDark);
     }
   }
 }

@@ -18,7 +18,7 @@ class DefinitionsLoading extends DefinitionsState {
 class DefinitionsLoaded extends DefinitionsState {
   final List<Definition> definitions;
 
-  DefinitionsLoaded(this.definitions);
+  const DefinitionsLoaded(this.definitions);
 
   @override
   List<Object> get props => [definitions];
@@ -27,7 +27,7 @@ class DefinitionsLoaded extends DefinitionsState {
 class DefinitionsError extends DefinitionsState {
   final String message;
 
-  DefinitionsError(this.message);
+  const DefinitionsError(this.message);
 
   @override
   List<Object> get props => [message];

@@ -19,19 +19,19 @@ class DefinitionsBloc extends Bloc<DefinitionsEvent, DefinitionsState> {
     if (event is FetchDefinitions) {
       if (event.term != '') {
         yield DefinitionsLoading();
-        List<Definition> definitions =
+        final List<Definition> definitions =
             await termDefinitionsRepository.fetchDefinitions(event.term);
         if (definitions == null) {
-          yield DefinitionsError(
+          yield const DefinitionsError(
               'No internet connection, please connect to internet to view definitions');
-        } else if (definitions.length == 0) {
-          yield DefinitionsError(
+        } else if (definitions.isEmpty) {
+          yield const DefinitionsError(
               'No definitions found for this slang, try another word');
         } else {
           yield DefinitionsLoaded(definitions);
         }
       } else {
-        yield DefinitionsError(
+        yield const DefinitionsError(
             "Please enter a word to search for its definitions");
       }
     } else if (event is ResetDefinitions) {

@@ -11,16 +11,16 @@ class TermDefinitionsRepository {
   Future<Term> getTerm(String passedTerm) async {
     // In case user searches for empty text
     if (passedTerm == '') {
-      Term term = Term(
+      final Term term = Term(
           term: 'Urban Dictionary',
           lastViewed: DateTime.now(),
           isFavorite: false);
       return term;
     }
 
-    String modifiedTerm = passedTerm.toLowerCase().trim();
+    final String modifiedTerm = passedTerm.toLowerCase().trim();
     Term term = await db.termDao.getTerm(modifiedTerm);
-    List<Definition> definitions = await fetchDefinitions(passedTerm);
+    final List<Definition> definitions = await fetchDefinitions(passedTerm);
     if (term == null) {
       term = Term(
           term: passedTerm.toLowerCase().trim(),
@@ -28,7 +28,7 @@ class TermDefinitionsRepository {
           isFavorite: false);
       if (definitions == null) {
         return term;
-      } else if (definitions.length == 0) {
+      } else if (definitions.isEmpty) {
         return term;
       } else {
         await db.termDao.insertNewTerm(term.term);
@@ -42,7 +42,7 @@ class TermDefinitionsRepository {
 
   Future<Term> toggleFavorite(Term passedTerm) async {
     await db.termDao.toggleFavorite(passedTerm);
-    return await db.termDao.getTerm(passedTerm.term);
+    return db.termDao.getTerm(passedTerm.term);
   }
 
   Future deleteTerm(String term) async {
@@ -50,27 +50,27 @@ class TermDefinitionsRepository {
   }
 
   Future<List<Definition>> _callApi(String passedTerm) async {
-    String modifiedTerm = passedTerm.toLowerCase().trim();
+    final String modifiedTerm = passedTerm.toLowerCase().trim();
 
-    return await api.getDefinitions(modifiedTerm);
+    return api.getDefinitions(modifiedTerm);
   }
 
   Future<List<Definition>> fetchDefinitions(String passedTerm) async {
-    String modifiedTerm = passedTerm.toLowerCase().trim();
-    List<Definition> dbDefinitions =
+    final String modifiedTerm = passedTerm.toLowerCase().trim();
+    final List<Definition> dbDefinitions =
         await db.definitionsDao.getDefinitions(modifiedTerm);
-    List<Definition> apiDefinitions = await _callApi(passedTerm);
+    final List<Definition> apiDefinitions = await _callApi(passedTerm);
 
     // No internet connection and no data in db
-    if (apiDefinitions == null && dbDefinitions.length == 0) {
+    if (apiDefinitions == null && dbDefinitions.isEmpty) {
       return null;
     }
     // No internet connection and data found in db
-    else if (apiDefinitions == null && dbDefinitions.length != 0) {
+    else if (apiDefinitions == null && dbDefinitions.isNotEmpty) {
       return dbDefinitions;
     }
     // Connected but no data in api
-    else if (apiDefinitions.length == 0) {
+    else if (apiDefinitions.isEmpty) {
       return apiDefinitions;
     }
     // Connected and there is data in db (update data in db)

@@ -13,7 +13,7 @@ class InitialTermState extends TermState {
 class TermChangeStarted extends TermState {
   final String term;
 
-  TermChangeStarted(this.term);
+  const TermChangeStarted(this.term);
   @override
   List<Object> get props => [term];
 }
@@ -21,7 +21,7 @@ class TermChangeStarted extends TermState {
 class TermChanged extends TermState {
   final Term term;
 
-  TermChanged(this.term);
+  const TermChanged(this.term);
   @override
   List<Object> get props => [term];
 }

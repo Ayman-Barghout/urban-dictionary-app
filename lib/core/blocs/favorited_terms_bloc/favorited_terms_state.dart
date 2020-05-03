@@ -18,7 +18,7 @@ class FavoritedTermsLoading extends FavoritedTermsState {
 class FavoritedTermsLoaded extends FavoritedTermsState {
   final List<Term> favorites;
 
-  FavoritedTermsLoaded(this.favorites);
+  const FavoritedTermsLoaded(this.favorites);
 
   @override
   List<Object> get props => [favorites];
@@ -27,7 +27,7 @@ class FavoritedTermsLoaded extends FavoritedTermsState {
 class FavoritesEmpty extends FavoritedTermsState {
   final String message;
 
-  FavoritesEmpty(this.message);
+  const FavoritesEmpty(this.message);
   @override
   List<Object> get props => [message];
 }

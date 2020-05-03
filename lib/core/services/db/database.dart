@@ -18,7 +18,7 @@ class Definitions extends Table {
 class Terms extends Table {
   TextColumn get term => text()();
   DateTimeColumn get lastViewed => dateTime()();
-  BoolColumn get isFavorite => boolean().withDefault(Constant(false))();
+  BoolColumn get isFavorite => boolean().withDefault(const Constant(false))();
 
   @override
   Set<Column> get primaryKey => {term};
@@ -27,10 +27,10 @@ class Terms extends Table {
 @UseMoor(tables: [Terms, Definitions], daos: [TermDao, DefinitionsDao])
 class AppDatabase extends _$AppDatabase {
   AppDatabase()
-      : super((FlutterQueryExecutor.inDatabaseFolder(
+      : super(FlutterQueryExecutor.inDatabaseFolder(
           path: 'urban_dict_db.sqlite',
           logStatements: true,
-        )));
+        ));
 
   @override
   int get schemaVersion => 2;

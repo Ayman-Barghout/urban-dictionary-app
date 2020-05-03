@@ -1,14 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-
-import 'dart:convert';
 
 import 'package:urban_dict_slang/core/services/api/api.dart';
 import 'package:urban_dict_slang/core/services/db/database.dart';
 
 class HttpApi implements Api {
-  static const String BASE_URL =
+  static const String baseUrl =
       'http://api.urbandictionary.com/v0/define?term=';
 
   Future<bool> _isUserConnected() async {
@@ -26,15 +25,16 @@ class HttpApi implements Api {
 
   @override
   Future<List<Definition>> getDefinitions(String term) async {
-    bool connected = await _isUserConnected();
+    final bool connected = await _isUserConnected();
     if (connected) {
-      http.Response response = await http.get(BASE_URL + term);
+      final http.Response response = await http.get(baseUrl + term);
       if (response.statusCode == 200) {
-        var body = jsonDecode(response.body);
-        List<Definition> definitions = List<Definition>();
-        List<dynamic> definitionsList = body['list'];
+        final body = jsonDecode(response.body);
+        final List<Definition> definitions = [];
+        final List<Map<String, dynamic>> definitionsList =
+            List<Map<String, dynamic>>.from(body['list'] as List);
 
-        for (Map<String, dynamic> json in definitionsList) {
+        for (final Map<String, dynamic> json in definitionsList) {
           definitions.add(Definition.fromJson(json));
         }
         return definitions;

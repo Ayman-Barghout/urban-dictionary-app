@@ -8,14 +8,14 @@ import 'package:urban_dict_slang/ui/views/home_page/terms_view.dart';
 import 'favorites_view.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  const HomePage({Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final controller = PageController(initialPage: 1);
+  final PageController controller = PageController(initialPage: 1);
   int _selectedIndex;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -33,7 +33,8 @@ class _HomePageState extends State<HomePage> {
       BlocProvider.of<FavoritedTermsBloc>(context).add(LoadFavoritedTerms());
     }
     await controller.animateToPage(i,
-        duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.fastOutSlowIn);
     setState(() {
       _selectedIndex = i;
     });
@@ -54,7 +55,7 @@ class _HomePageState extends State<HomePage> {
             TermsView(
               changeIndex: updateIndex,
             ),
-            SearchView(),
+            const SearchView(),
             FavoritesView(
               changeIndex: updateIndex,
             ),

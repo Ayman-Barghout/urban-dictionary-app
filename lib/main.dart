@@ -15,7 +15,7 @@ void main() {
     providers: repositoryProviders,
     child: MultiBlocProvider(
       providers: blocProviders,
-      child: UrbanDictApp(),
+      child: const UrbanDictApp(),
     ),
   ));
 }
@@ -39,12 +39,12 @@ class UrbanDictApp extends StatelessWidget {
         routes: {
           '/': (context) => SplashScreen(
                 'assets/flare/splash.flr',
-                (context) => HomePage(),
+                (context) => const HomePage(),
                 startAnimation: 'intro',
-                until: () => Future.delayed(Duration(seconds: 3)),
+                until: () => Future.delayed(const Duration(seconds: 3)),
                 backgroundColor: Theme.of(context).backgroundColor,
               ),
-          '/homepage': (context) => HomePage(),
+          '/homepage': (context) => const HomePage(),
         },
         initialRoute: '/',
       ),

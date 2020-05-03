@@ -43,7 +43,7 @@ class DefinitionsList extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return DefinitionTile(
                   definition: state.definitions[index],
-                  goToDefinition: (value) {
+                  goToDefinition: (String value) {
                     BlocProvider.of<TermBloc>(context).add(
                       ChangeTerm(newTerm: value),
                     );

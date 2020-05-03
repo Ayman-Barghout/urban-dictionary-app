@@ -12,8 +12,8 @@ class ThemeInitial extends ThemeState {
 class ThemeChanged extends ThemeState {
   final bool isDarkTheme;
 
-  ThemeChanged(this.isDarkTheme);
+  const ThemeChanged({this.isDarkTheme});
 
   @override
-  List<Object> get props => [this.isDarkTheme];
+  List<Object> get props => [isDarkTheme];
 }

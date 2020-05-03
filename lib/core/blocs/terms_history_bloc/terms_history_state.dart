@@ -18,7 +18,7 @@ class TermsHistoryLoading extends TermsHistoryState {
 class TermsHistoryLoaded extends TermsHistoryState {
   final Map<int, List<Term>> termsHistory;
 
-  TermsHistoryLoaded(this.termsHistory);
+  const TermsHistoryLoaded(this.termsHistory);
 
   @override
   List<Object> get props => [termsHistory];
@@ -27,7 +27,7 @@ class TermsHistoryLoaded extends TermsHistoryState {
 class TermsHistoryEmpty extends TermsHistoryState {
   final String message;
 
-  TermsHistoryEmpty(this.message);
+  const TermsHistoryEmpty(this.message);
   @override
   List<Object> get props => [message];
 }

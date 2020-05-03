@@ -7,7 +7,7 @@ abstract class DefinitionsEvent extends Equatable {
 class FetchDefinitions extends DefinitionsEvent {
   final String term;
 
-  FetchDefinitions(this.term);
+  const FetchDefinitions(this.term);
 
   @override
   List<Object> get props => [term];

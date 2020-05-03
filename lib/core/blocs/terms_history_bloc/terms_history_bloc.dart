@@ -18,12 +18,12 @@ class TermsHistoryBloc extends Bloc<TermsHistoryEvent, TermsHistoryState> {
   ) async* {
     if (event is LoadTermsHistory) {
       yield TermsHistoryLoading();
-      List<Term> terms = await termsRepository.getAllTerms();
-      if (terms.length == 0) {
-        yield TermsHistoryEmpty(
+      final List<Term> terms = await termsRepository.getAllTerms();
+      if (terms.isEmpty) {
+        yield const TermsHistoryEmpty(
             "You haven't searched for slangs yet, your search history will appear here");
       } else {
-        Map<int, List<Term>> termsHistory =
+        final Map<int, List<Term>> termsHistory =
             termsRepository.getTermsHistory(terms);
         yield TermsHistoryLoaded(termsHistory);
       }

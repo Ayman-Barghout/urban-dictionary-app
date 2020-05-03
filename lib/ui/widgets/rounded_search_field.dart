@@ -14,7 +14,7 @@ class RoundedSearchField extends StatefulWidget {
 }
 
 class _RoundedSearchFieldState extends State<RoundedSearchField> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   void _onSearch(String term) {
     BlocProvider.of<TermBloc>(context).add(ChangeTerm(newTerm: term));
@@ -47,7 +47,7 @@ class _RoundedSearchFieldState extends State<RoundedSearchField> {
           ),
           onPressed: () => _onSearch(_searchController.text),
         ),
-        contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+        contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
         prefixIcon: Icon(Icons.search),
         hintText: "Search...",
         border: OutlineInputBorder(

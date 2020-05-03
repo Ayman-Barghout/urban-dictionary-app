@@ -6,7 +6,7 @@ class TermsRepository {
   TermsRepository(this.db);
 
   Future<List<Term>> getAllTerms() async {
-    return await db.termDao.getAllTerms();
+    return db.termDao.getAllTerms();
   }
 
   int _getDaysDifference(DateTime viewed) =>
@@ -16,9 +16,9 @@ class TermsRepository {
     int start = -1;
     int end = -1;
     int lastDay = 0;
-    Map<int, List<Term>> termsWithDays = {};
+    final Map<int, List<Term>> termsWithDays = {};
     for (int i = 0; i < terms.length; i++) {
-      int day = _getDaysDifference(terms[i].lastViewed);
+      final int day = _getDaysDifference(terms[i].lastViewed);
       if (!termsWithDays.containsKey(day)) {
         if (start < 0) {
           start = i;
@@ -37,13 +37,15 @@ class TermsRepository {
 
     if (termsWithDays[_getDaysDifference(terms[terms.length - 1].lastViewed)] ==
             null &&
-        start > -1)
+        start > -1) {
       termsWithDays[_getDaysDifference(terms[terms.length - 1].lastViewed)] =
           terms.sublist(start);
+    }
+
     return termsWithDays;
   }
 
   Future<List<Term>> getAllFavorites() async {
-    return await db.termDao.getAllFavorites();
+    return db.termDao.getAllFavorites();
   }
 }
