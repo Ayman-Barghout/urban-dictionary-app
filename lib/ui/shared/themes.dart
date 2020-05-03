@@ -12,7 +12,7 @@ final ThemeData mainTheme = ThemeData(
   bottomAppBarColor: Colors.white,
   disabledColor: Colors.grey,
   scaffoldBackgroundColor: Colors.white,
-  iconTheme: IconThemeData(color: Colors.white),
+  iconTheme: const IconThemeData(color: Colors.white),
   appBarTheme: const AppBarTheme(
     elevation: 0,
   ),
@@ -34,7 +34,7 @@ final ThemeData darkTheme = ThemeData(
   bottomAppBarColor: Colors.white,
   disabledColor: Colors.grey,
   scaffoldBackgroundColor: app_colors.darkThemeBackgroundColor,
-  iconTheme: IconThemeData(color: Colors.white),
+  iconTheme: const IconThemeData(color: Colors.white),
   appBarTheme: const AppBarTheme(
     elevation: 0,
   ),

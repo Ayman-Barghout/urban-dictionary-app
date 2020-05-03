@@ -25,7 +25,7 @@ class TermBloc extends Bloc<TermEvent, TermState> {
   }
 
   Stream<TermState> _mapChangeTermToState(ChangeTerm event) async* {
-    yield TermChangeStarted(event.newTerm);
+    yield TermChangeStarted(event.newTerm.toLowerCase());
     final Term term = await termDefinitionsRepository.getTerm(event.newTerm);
     yield TermChanged(term);
   }

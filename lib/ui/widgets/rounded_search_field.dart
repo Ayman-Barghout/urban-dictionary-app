@@ -48,13 +48,13 @@ class _RoundedSearchFieldState extends State<RoundedSearchField> {
           onPressed: () => _onSearch(_searchController.text),
         ),
         contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-        prefixIcon: Icon(Icons.search),
+        prefixIcon: const Icon(Icons.search),
         hintText: "Search...",
         border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white, width: 32.0),
+            borderSide: const BorderSide(color: Colors.white, width: 32.0),
             borderRadius: BorderRadius.circular(25.0)),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 32.0),
+          borderSide: const BorderSide(color: Colors.white, width: 32.0),
           borderRadius: BorderRadius.circular(25.0),
         ),
       ),

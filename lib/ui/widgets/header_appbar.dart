@@ -44,7 +44,9 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
                     icon:
                         Icon(Icons.info_outline, color: Colors.white, size: 35),
                   ),
-                  const SizedBox(),
+                  const SizedBox(
+                    width: 4,
+                  ),
                   BlocBuilder<ThemeBloc, ThemeState>(
                     builder: (context, state) => DayNightSwitcherIcon(
                       isDarkModeEnabled:
