@@ -10,14 +10,20 @@ import 'package:urban_dict_slang/ui/views/home_page/home_page.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(MultiRepositoryProvider(
-    providers: repositoryProviders,
-    child: MultiBlocProvider(
-      providers: blocProviders,
-      child: const UrbanDictApp(),
+    [
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ],
+  );
+  runApp(
+    MultiRepositoryProvider(
+      providers: repositoryProviders,
+      child: MultiBlocProvider(
+        providers: blocProviders,
+        child: const UrbanDictApp(),
+      ),
     ),
-  ));
+  );
 }
 
 class UrbanDictApp extends StatelessWidget {
@@ -42,7 +48,8 @@ class UrbanDictApp extends StatelessWidget {
                 (context) => const HomePage(),
                 startAnimation: 'intro',
                 until: () => Future.delayed(const Duration(seconds: 3)),
-                backgroundColor: Theme.of(context).backgroundColor,
+                backgroundColor: Theme.of(context).colorScheme.background,
+                fit: BoxFit.cover,
               ),
           '/homepage': (context) => const HomePage(),
         },
