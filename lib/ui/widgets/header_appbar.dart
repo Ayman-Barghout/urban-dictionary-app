@@ -124,7 +124,9 @@ class HeaderAppBar extends StatelessWidget implements PreferredSizeWidget {
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.horizontal(
-                  left: Radius.circular(25.0), right: Radius.circular(25.0)),
+                left: Radius.circular(25.0),
+                right: Radius.circular(25.0),
+              ),
             ),
             child: child,
           ),

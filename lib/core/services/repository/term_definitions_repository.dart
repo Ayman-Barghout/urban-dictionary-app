@@ -24,9 +24,10 @@ class TermDefinitionsRepository {
     final definitions = await fetchDefinitions(passedTerm);
     if (term == null) {
       term = Term(
-          term: passedTerm.toLowerCase().trim(),
-          lastViewed: DateTime.now(),
-          isFavorite: false);
+        term: passedTerm.toLowerCase().trim(),
+        lastViewed: DateTime.now(),
+        isFavorite: false,
+      );
       if (definitions == null) {
         return term;
       } else if (definitions.isEmpty) {

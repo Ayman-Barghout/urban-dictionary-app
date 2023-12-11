@@ -30,9 +30,11 @@ class _HomePageState extends State<HomePage> {
     } else if (i == 2) {
       BlocProvider.of<FavoritedTermsBloc>(context).add(LoadFavoritedTerms());
     }
-    await controller.animateToPage(i,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.fastOutSlowIn);
+    await controller.animateToPage(
+      i,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.fastOutSlowIn,
+    );
     setState(() {
       _selectedIndex = i;
     });
@@ -77,12 +79,14 @@ class _HomePageState extends State<HomePage> {
         ],
         currentIndex: _selectedIndex,
         backgroundColor: Theme.of(context).cardColor,
-        unselectedItemColor: Theme.of(context).backgroundColor == Colors.white
-            ? Colors.grey.shade600
-            : Colors.white.withOpacity(0.5),
-        selectedItemColor: Theme.of(context).backgroundColor == Colors.white
-            ? Theme.of(context).primaryColor
-            : Colors.white,
+        unselectedItemColor:
+            Theme.of(context).colorScheme.background == Colors.white
+                ? Colors.grey.shade600
+                : Colors.white.withOpacity(0.5),
+        selectedItemColor:
+            Theme.of(context).colorScheme.background == Colors.white
+                ? Theme.of(context).primaryColor
+                : Colors.white,
         onTap: (i) {
           updateIndex(i);
         },

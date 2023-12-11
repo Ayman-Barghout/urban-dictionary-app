@@ -39,7 +39,7 @@ class _RoundedSearchFieldState extends State<RoundedSearchField> {
         filled: true,
         fillColor: Colors.white,
         suffixIcon: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_right,
             size: 35.0,
           ),
@@ -49,8 +49,9 @@ class _RoundedSearchFieldState extends State<RoundedSearchField> {
         prefixIcon: const Icon(Icons.search),
         hintText: "Search...",
         border: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.white, width: 32.0),
-            borderRadius: BorderRadius.circular(25.0)),
+          borderSide: const BorderSide(color: Colors.white, width: 32.0),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.white, width: 32.0),
           borderRadius: BorderRadius.circular(25.0),

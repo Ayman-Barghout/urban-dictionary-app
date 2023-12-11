@@ -29,20 +29,25 @@ class Terms extends Table {
 @DriftDatabase(tables: [Terms, Definitions], daos: [TermDao, DefinitionsDao])
 class AppDatabase extends _$AppDatabase {
   AppDatabase()
-      : super(SqfliteQueryExecutor.inDatabaseFolder(
-          path: 'urban_dict_db.sqlite',
-          logStatements: true,
-        ));
+      : super(
+          SqfliteQueryExecutor.inDatabaseFolder(
+            path: 'urban_dict_db.sqlite',
+            logStatements: true,
+          ),
+        );
 
   @override
   int get schemaVersion => 2;
 
   @override
-  MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
-        return m.createAll();
-      }, onUpgrade: (Migrator m, int from, int to) async {
-        if (from == 1) {}
-      });
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: (Migrator m) {
+          return m.createAll();
+        },
+        onUpgrade: (Migrator m, int from, int to) async {
+          if (from == 1) {}
+        },
+      );
 }
 
 @DriftAccessor(tables: [Terms])
@@ -53,7 +58,8 @@ class TermDao extends DatabaseAccessor<AppDatabase> with _$TermDaoMixin {
 
   Future<List<Term>> getAllTerms() => (select(terms)
         ..orderBy([
-          (t) => OrderingTerm(expression: t.lastViewed, mode: OrderingMode.desc)
+          (t) =>
+              OrderingTerm(expression: t.lastViewed, mode: OrderingMode.desc),
         ]))
       .get();
 
