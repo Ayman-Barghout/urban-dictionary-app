@@ -21,7 +21,7 @@ void main() {
 }
 
 class UrbanDictApp extends StatelessWidget {
-  const UrbanDictApp({Key key}) : super(key: key);
+  const UrbanDictApp({super.key});
 
   @override
   Widget build(BuildContext context) {

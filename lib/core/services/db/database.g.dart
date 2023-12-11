@@ -2,36 +2,115 @@
 
 part of 'database.dart';
 
-// **************************************************************************
-// MoorGenerator
-// **************************************************************************
+// ignore_for_file: type=lint
+class $TermsTable extends Terms with TableInfo<$TermsTable, Term> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TermsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _termMeta = const VerificationMeta('term');
+  @override
+  late final GeneratedColumn<String> term = GeneratedColumn<String>(
+      'term', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _lastViewedMeta =
+      const VerificationMeta('lastViewed');
+  @override
+  late final GeneratedColumn<DateTime> lastViewed = GeneratedColumn<DateTime>(
+      'last_viewed', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _isFavoriteMeta =
+      const VerificationMeta('isFavorite');
+  @override
+  late final GeneratedColumn<bool> isFavorite = GeneratedColumn<bool>(
+      'is_favorite', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_favorite" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [term, lastViewed, isFavorite];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'terms';
+  @override
+  VerificationContext validateIntegrity(Insertable<Term> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('term')) {
+      context.handle(
+          _termMeta, term.isAcceptableOrUnknown(data['term']!, _termMeta));
+    } else if (isInserting) {
+      context.missing(_termMeta);
+    }
+    if (data.containsKey('last_viewed')) {
+      context.handle(
+          _lastViewedMeta,
+          lastViewed.isAcceptableOrUnknown(
+              data['last_viewed']!, _lastViewedMeta));
+    } else if (isInserting) {
+      context.missing(_lastViewedMeta);
+    }
+    if (data.containsKey('is_favorite')) {
+      context.handle(
+          _isFavoriteMeta,
+          isFavorite.isAcceptableOrUnknown(
+              data['is_favorite']!, _isFavoriteMeta));
+    }
+    return context;
+  }
 
-// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+  @override
+  Set<GeneratedColumn> get $primaryKey => {term};
+  @override
+  Term map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Term(
+      term: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}term'])!,
+      lastViewed: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}last_viewed'])!,
+      isFavorite: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_favorite'])!,
+    );
+  }
+
+  @override
+  $TermsTable createAlias(String alias) {
+    return $TermsTable(attachedDatabase, alias);
+  }
+}
+
 class Term extends DataClass implements Insertable<Term> {
   final String term;
   final DateTime lastViewed;
   final bool isFavorite;
-  Term(
-      {@required this.term,
-      @required this.lastViewed,
-      @required this.isFavorite});
-  factory Term.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
-    final effectivePrefix = prefix ?? '';
-    final stringType = db.typeSystem.forDartType<String>();
-    final dateTimeType = db.typeSystem.forDartType<DateTime>();
-    final boolType = db.typeSystem.forDartType<bool>();
-    return Term(
-      term: stringType.mapFromDatabaseResponse(data['${effectivePrefix}term']),
-      lastViewed: dateTimeType
-          .mapFromDatabaseResponse(data['${effectivePrefix}last_viewed']),
-      isFavorite: boolType
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_favorite']),
+  const Term(
+      {required this.term, required this.lastViewed, required this.isFavorite});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['term'] = Variable<String>(term);
+    map['last_viewed'] = Variable<DateTime>(lastViewed);
+    map['is_favorite'] = Variable<bool>(isFavorite);
+    return map;
+  }
+
+  TermsCompanion toCompanion(bool nullToAbsent) {
+    return TermsCompanion(
+      term: Value(term),
+      lastViewed: Value(lastViewed),
+      isFavorite: Value(isFavorite),
     );
   }
+
   factory Term.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Term(
       term: serializer.fromJson<String>(json['term']),
       lastViewed: serializer.fromJson<DateTime>(json['lastViewed']),
@@ -39,8 +118,8 @@ class Term extends DataClass implements Insertable<Term> {
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'term': serializer.toJson<String>(term),
       'lastViewed': serializer.toJson<DateTime>(lastViewed),
@@ -48,20 +127,7 @@ class Term extends DataClass implements Insertable<Term> {
     };
   }
 
-  @override
-  TermsCompanion createCompanion(bool nullToAbsent) {
-    return TermsCompanion(
-      term: term == null && nullToAbsent ? const Value.absent() : Value(term),
-      lastViewed: lastViewed == null && nullToAbsent
-          ? const Value.absent()
-          : Value(lastViewed),
-      isFavorite: isFavorite == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isFavorite),
-    );
-  }
-
-  Term copyWith({String term, DateTime lastViewed, bool isFavorite}) => Term(
+  Term copyWith({String? term, DateTime? lastViewed, bool? isFavorite}) => Term(
         term: term ?? this.term,
         lastViewed: lastViewed ?? this.lastViewed,
         isFavorite: isFavorite ?? this.isFavorite,
@@ -77,10 +143,9 @@ class Term extends DataClass implements Insertable<Term> {
   }
 
   @override
-  int get hashCode => $mrjf(
-      $mrjc(term.hashCode, $mrjc(lastViewed.hashCode, isFavorite.hashCode)));
+  int get hashCode => Object.hash(term, lastViewed, isFavorite);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Term &&
           other.term == this.term &&
@@ -92,124 +157,211 @@ class TermsCompanion extends UpdateCompanion<Term> {
   final Value<String> term;
   final Value<DateTime> lastViewed;
   final Value<bool> isFavorite;
+  final Value<int> rowid;
   const TermsCompanion({
     this.term = const Value.absent(),
     this.lastViewed = const Value.absent(),
     this.isFavorite = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   TermsCompanion.insert({
-    @required String term,
-    @required DateTime lastViewed,
+    required String term,
+    required DateTime lastViewed,
     this.isFavorite = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : term = Value(term),
         lastViewed = Value(lastViewed);
+  static Insertable<Term> custom({
+    Expression<String>? term,
+    Expression<DateTime>? lastViewed,
+    Expression<bool>? isFavorite,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (term != null) 'term': term,
+      if (lastViewed != null) 'last_viewed': lastViewed,
+      if (isFavorite != null) 'is_favorite': isFavorite,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
   TermsCompanion copyWith(
-      {Value<String> term,
-      Value<DateTime> lastViewed,
-      Value<bool> isFavorite}) {
+      {Value<String>? term,
+      Value<DateTime>? lastViewed,
+      Value<bool>? isFavorite,
+      Value<int>? rowid}) {
     return TermsCompanion(
       term: term ?? this.term,
       lastViewed: lastViewed ?? this.lastViewed,
       isFavorite: isFavorite ?? this.isFavorite,
-    );
-  }
-}
-
-class $TermsTable extends Terms with TableInfo<$TermsTable, Term> {
-  final GeneratedDatabase _db;
-  final String _alias;
-  $TermsTable(this._db, [this._alias]);
-  final VerificationMeta _termMeta = const VerificationMeta('term');
-  GeneratedTextColumn _term;
-  @override
-  GeneratedTextColumn get term => _term ??= _constructTerm();
-  GeneratedTextColumn _constructTerm() {
-    return GeneratedTextColumn(
-      'term',
-      $tableName,
-      false,
+      rowid: rowid ?? this.rowid,
     );
   }
 
-  final VerificationMeta _lastViewedMeta = const VerificationMeta('lastViewed');
-  GeneratedDateTimeColumn _lastViewed;
   @override
-  GeneratedDateTimeColumn get lastViewed =>
-      _lastViewed ??= _constructLastViewed();
-  GeneratedDateTimeColumn _constructLastViewed() {
-    return GeneratedDateTimeColumn(
-      'last_viewed',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _isFavoriteMeta = const VerificationMeta('isFavorite');
-  GeneratedBoolColumn _isFavorite;
-  @override
-  GeneratedBoolColumn get isFavorite => _isFavorite ??= _constructIsFavorite();
-  GeneratedBoolColumn _constructIsFavorite() {
-    return GeneratedBoolColumn('is_favorite', $tableName, false,
-        defaultValue: const Constant(false));
-  }
-
-  @override
-  List<GeneratedColumn> get $columns => [term, lastViewed, isFavorite];
-  @override
-  $TermsTable get asDslTable => this;
-  @override
-  String get $tableName => _alias ?? 'terms';
-  @override
-  final String actualTableName = 'terms';
-  @override
-  VerificationContext validateIntegrity(TermsCompanion d,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    if (d.term.present) {
-      context.handle(
-          _termMeta, term.isAcceptableValue(d.term.value, _termMeta));
-    } else if (isInserting) {
-      context.missing(_termMeta);
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (term.present) {
+      map['term'] = Variable<String>(term.value);
     }
-    if (d.lastViewed.present) {
-      context.handle(_lastViewedMeta,
-          lastViewed.isAcceptableValue(d.lastViewed.value, _lastViewedMeta));
-    } else if (isInserting) {
-      context.missing(_lastViewedMeta);
+    if (lastViewed.present) {
+      map['last_viewed'] = Variable<DateTime>(lastViewed.value);
     }
-    if (d.isFavorite.present) {
-      context.handle(_isFavoriteMeta,
-          isFavorite.isAcceptableValue(d.isFavorite.value, _isFavoriteMeta));
+    if (isFavorite.present) {
+      map['is_favorite'] = Variable<bool>(isFavorite.value);
     }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {term};
-  @override
-  Term map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Term.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(TermsCompanion d) {
-    final map = <String, Variable>{};
-    if (d.term.present) {
-      map['term'] = Variable<String, StringType>(d.term.value);
-    }
-    if (d.lastViewed.present) {
-      map['last_viewed'] = Variable<DateTime, DateTimeType>(d.lastViewed.value);
-    }
-    if (d.isFavorite.present) {
-      map['is_favorite'] = Variable<bool, BoolType>(d.isFavorite.value);
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
 
   @override
-  $TermsTable createAlias(String alias) {
-    return $TermsTable(_db, alias);
+  String toString() {
+    return (StringBuffer('TermsCompanion(')
+          ..write('term: $term, ')
+          ..write('lastViewed: $lastViewed, ')
+          ..write('isFavorite: $isFavorite, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $DefinitionsTable extends Definitions
+    with TableInfo<$DefinitionsTable, Definition> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DefinitionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _termMeta = const VerificationMeta('term');
+  @override
+  late final GeneratedColumn<String> term = GeneratedColumn<String>(
+      'term', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _definitionMeta =
+      const VerificationMeta('definition');
+  @override
+  late final GeneratedColumn<String> definition = GeneratedColumn<String>(
+      'definition', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _exampleMeta =
+      const VerificationMeta('example');
+  @override
+  late final GeneratedColumn<String> example = GeneratedColumn<String>(
+      'example', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _authorMeta = const VerificationMeta('author');
+  @override
+  late final GeneratedColumn<String> author = GeneratedColumn<String>(
+      'author', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _thumbsUpMeta =
+      const VerificationMeta('thumbsUp');
+  @override
+  late final GeneratedColumn<int> thumbsUp = GeneratedColumn<int>(
+      'thumbs_up', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _thumbsDownMeta =
+      const VerificationMeta('thumbsDown');
+  @override
+  late final GeneratedColumn<int> thumbsDown = GeneratedColumn<int>(
+      'thumbs_down', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, term, definition, example, author, thumbsUp, thumbsDown];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'definitions';
+  @override
+  VerificationContext validateIntegrity(Insertable<Definition> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('term')) {
+      context.handle(
+          _termMeta, term.isAcceptableOrUnknown(data['term']!, _termMeta));
+    } else if (isInserting) {
+      context.missing(_termMeta);
+    }
+    if (data.containsKey('definition')) {
+      context.handle(
+          _definitionMeta,
+          definition.isAcceptableOrUnknown(
+              data['definition']!, _definitionMeta));
+    } else if (isInserting) {
+      context.missing(_definitionMeta);
+    }
+    if (data.containsKey('example')) {
+      context.handle(_exampleMeta,
+          example.isAcceptableOrUnknown(data['example']!, _exampleMeta));
+    } else if (isInserting) {
+      context.missing(_exampleMeta);
+    }
+    if (data.containsKey('author')) {
+      context.handle(_authorMeta,
+          author.isAcceptableOrUnknown(data['author']!, _authorMeta));
+    } else if (isInserting) {
+      context.missing(_authorMeta);
+    }
+    if (data.containsKey('thumbs_up')) {
+      context.handle(_thumbsUpMeta,
+          thumbsUp.isAcceptableOrUnknown(data['thumbs_up']!, _thumbsUpMeta));
+    } else if (isInserting) {
+      context.missing(_thumbsUpMeta);
+    }
+    if (data.containsKey('thumbs_down')) {
+      context.handle(
+          _thumbsDownMeta,
+          thumbsDown.isAcceptableOrUnknown(
+              data['thumbs_down']!, _thumbsDownMeta));
+    } else if (isInserting) {
+      context.missing(_thumbsDownMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Definition map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Definition(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      term: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}term'])!,
+      definition: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}definition'])!,
+      example: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}example'])!,
+      author: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}author'])!,
+      thumbsUp: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}thumbs_up'])!,
+      thumbsDown: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}thumbs_down'])!,
+    );
+  }
+
+  @override
+  $DefinitionsTable createAlias(String alias) {
+    return $DefinitionsTable(attachedDatabase, alias);
   }
 }
 
@@ -221,37 +373,42 @@ class Definition extends DataClass implements Insertable<Definition> {
   final String author;
   final int thumbsUp;
   final int thumbsDown;
-  Definition(
-      {@required this.id,
-      @required this.term,
-      @required this.definition,
-      @required this.example,
-      @required this.author,
-      @required this.thumbsUp,
-      @required this.thumbsDown});
-  factory Definition.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
-    final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    return Definition(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      term: stringType.mapFromDatabaseResponse(data['${effectivePrefix}term']),
-      definition: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}definition']),
-      example:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}example']),
-      author:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}author']),
-      thumbsUp:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}thumbs_up']),
-      thumbsDown: intType
-          .mapFromDatabaseResponse(data['${effectivePrefix}thumbs_down']),
+  const Definition(
+      {required this.id,
+      required this.term,
+      required this.definition,
+      required this.example,
+      required this.author,
+      required this.thumbsUp,
+      required this.thumbsDown});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['term'] = Variable<String>(term);
+    map['definition'] = Variable<String>(definition);
+    map['example'] = Variable<String>(example);
+    map['author'] = Variable<String>(author);
+    map['thumbs_up'] = Variable<int>(thumbsUp);
+    map['thumbs_down'] = Variable<int>(thumbsDown);
+    return map;
+  }
+
+  DefinitionsCompanion toCompanion(bool nullToAbsent) {
+    return DefinitionsCompanion(
+      id: Value(id),
+      term: Value(term),
+      definition: Value(definition),
+      example: Value(example),
+      author: Value(author),
+      thumbsUp: Value(thumbsUp),
+      thumbsDown: Value(thumbsDown),
     );
   }
+
   factory Definition.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Definition(
       id: serializer.fromJson<int>(json['id']),
       term: serializer.fromJson<String>(json['term']),
@@ -263,8 +420,8 @@ class Definition extends DataClass implements Insertable<Definition> {
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'term': serializer.toJson<String>(term),
@@ -276,36 +433,14 @@ class Definition extends DataClass implements Insertable<Definition> {
     };
   }
 
-  @override
-  DefinitionsCompanion createCompanion(bool nullToAbsent) {
-    return DefinitionsCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      term: term == null && nullToAbsent ? const Value.absent() : Value(term),
-      definition: definition == null && nullToAbsent
-          ? const Value.absent()
-          : Value(definition),
-      example: example == null && nullToAbsent
-          ? const Value.absent()
-          : Value(example),
-      author:
-          author == null && nullToAbsent ? const Value.absent() : Value(author),
-      thumbsUp: thumbsUp == null && nullToAbsent
-          ? const Value.absent()
-          : Value(thumbsUp),
-      thumbsDown: thumbsDown == null && nullToAbsent
-          ? const Value.absent()
-          : Value(thumbsDown),
-    );
-  }
-
   Definition copyWith(
-          {int id,
-          String term,
-          String definition,
-          String example,
-          String author,
-          int thumbsUp,
-          int thumbsDown}) =>
+          {int? id,
+          String? term,
+          String? definition,
+          String? example,
+          String? author,
+          int? thumbsUp,
+          int? thumbsDown}) =>
       Definition(
         id: id ?? this.id,
         term: term ?? this.term,
@@ -330,18 +465,10 @@ class Definition extends DataClass implements Insertable<Definition> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          term.hashCode,
-          $mrjc(
-              definition.hashCode,
-              $mrjc(
-                  example.hashCode,
-                  $mrjc(author.hashCode,
-                      $mrjc(thumbsUp.hashCode, thumbsDown.hashCode)))))));
+  int get hashCode =>
+      Object.hash(id, term, definition, example, author, thumbsUp, thumbsDown);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Definition &&
           other.id == this.id &&
@@ -372,26 +499,46 @@ class DefinitionsCompanion extends UpdateCompanion<Definition> {
   });
   DefinitionsCompanion.insert({
     this.id = const Value.absent(),
-    @required String term,
-    @required String definition,
-    @required String example,
-    @required String author,
-    @required int thumbsUp,
-    @required int thumbsDown,
+    required String term,
+    required String definition,
+    required String example,
+    required String author,
+    required int thumbsUp,
+    required int thumbsDown,
   })  : term = Value(term),
         definition = Value(definition),
         example = Value(example),
         author = Value(author),
         thumbsUp = Value(thumbsUp),
         thumbsDown = Value(thumbsDown);
+  static Insertable<Definition> custom({
+    Expression<int>? id,
+    Expression<String>? term,
+    Expression<String>? definition,
+    Expression<String>? example,
+    Expression<String>? author,
+    Expression<int>? thumbsUp,
+    Expression<int>? thumbsDown,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (term != null) 'term': term,
+      if (definition != null) 'definition': definition,
+      if (example != null) 'example': example,
+      if (author != null) 'author': author,
+      if (thumbsUp != null) 'thumbs_up': thumbsUp,
+      if (thumbsDown != null) 'thumbs_down': thumbsDown,
+    });
+  }
+
   DefinitionsCompanion copyWith(
-      {Value<int> id,
-      Value<String> term,
-      Value<String> definition,
-      Value<String> example,
-      Value<String> author,
-      Value<int> thumbsUp,
-      Value<int> thumbsDown}) {
+      {Value<int>? id,
+      Value<String>? term,
+      Value<String>? definition,
+      Value<String>? example,
+      Value<String>? author,
+      Value<int>? thumbsUp,
+      Value<int>? thumbsDown}) {
     return DefinitionsCompanion(
       id: id ?? this.id,
       term: term ?? this.term,
@@ -402,214 +549,66 @@ class DefinitionsCompanion extends UpdateCompanion<Definition> {
       thumbsDown: thumbsDown ?? this.thumbsDown,
     );
   }
-}
-
-class $DefinitionsTable extends Definitions
-    with TableInfo<$DefinitionsTable, Definition> {
-  final GeneratedDatabase _db;
-  final String _alias;
-  $DefinitionsTable(this._db, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
-  final VerificationMeta _termMeta = const VerificationMeta('term');
-  GeneratedTextColumn _term;
-  @override
-  GeneratedTextColumn get term => _term ??= _constructTerm();
-  GeneratedTextColumn _constructTerm() {
-    return GeneratedTextColumn(
-      'term',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _definitionMeta = const VerificationMeta('definition');
-  GeneratedTextColumn _definition;
-  @override
-  GeneratedTextColumn get definition => _definition ??= _constructDefinition();
-  GeneratedTextColumn _constructDefinition() {
-    return GeneratedTextColumn(
-      'definition',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _exampleMeta = const VerificationMeta('example');
-  GeneratedTextColumn _example;
-  @override
-  GeneratedTextColumn get example => _example ??= _constructExample();
-  GeneratedTextColumn _constructExample() {
-    return GeneratedTextColumn(
-      'example',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _authorMeta = const VerificationMeta('author');
-  GeneratedTextColumn _author;
-  @override
-  GeneratedTextColumn get author => _author ??= _constructAuthor();
-  GeneratedTextColumn _constructAuthor() {
-    return GeneratedTextColumn(
-      'author',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _thumbsUpMeta = const VerificationMeta('thumbsUp');
-  GeneratedIntColumn _thumbsUp;
-  @override
-  GeneratedIntColumn get thumbsUp => _thumbsUp ??= _constructThumbsUp();
-  GeneratedIntColumn _constructThumbsUp() {
-    return GeneratedIntColumn(
-      'thumbs_up',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _thumbsDownMeta = const VerificationMeta('thumbsDown');
-  GeneratedIntColumn _thumbsDown;
-  @override
-  GeneratedIntColumn get thumbsDown => _thumbsDown ??= _constructThumbsDown();
-  GeneratedIntColumn _constructThumbsDown() {
-    return GeneratedIntColumn(
-      'thumbs_down',
-      $tableName,
-      false,
-    );
-  }
 
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, term, definition, example, author, thumbsUp, thumbsDown];
-  @override
-  $DefinitionsTable get asDslTable => this;
-  @override
-  String get $tableName => _alias ?? 'definitions';
-  @override
-  final String actualTableName = 'definitions';
-  @override
-  VerificationContext validateIntegrity(DefinitionsCompanion d,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    if (d.id.present) {
-      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
     }
-    if (d.term.present) {
-      context.handle(
-          _termMeta, term.isAcceptableValue(d.term.value, _termMeta));
-    } else if (isInserting) {
-      context.missing(_termMeta);
+    if (term.present) {
+      map['term'] = Variable<String>(term.value);
     }
-    if (d.definition.present) {
-      context.handle(_definitionMeta,
-          definition.isAcceptableValue(d.definition.value, _definitionMeta));
-    } else if (isInserting) {
-      context.missing(_definitionMeta);
+    if (definition.present) {
+      map['definition'] = Variable<String>(definition.value);
     }
-    if (d.example.present) {
-      context.handle(_exampleMeta,
-          example.isAcceptableValue(d.example.value, _exampleMeta));
-    } else if (isInserting) {
-      context.missing(_exampleMeta);
+    if (example.present) {
+      map['example'] = Variable<String>(example.value);
     }
-    if (d.author.present) {
-      context.handle(
-          _authorMeta, author.isAcceptableValue(d.author.value, _authorMeta));
-    } else if (isInserting) {
-      context.missing(_authorMeta);
+    if (author.present) {
+      map['author'] = Variable<String>(author.value);
     }
-    if (d.thumbsUp.present) {
-      context.handle(_thumbsUpMeta,
-          thumbsUp.isAcceptableValue(d.thumbsUp.value, _thumbsUpMeta));
-    } else if (isInserting) {
-      context.missing(_thumbsUpMeta);
+    if (thumbsUp.present) {
+      map['thumbs_up'] = Variable<int>(thumbsUp.value);
     }
-    if (d.thumbsDown.present) {
-      context.handle(_thumbsDownMeta,
-          thumbsDown.isAcceptableValue(d.thumbsDown.value, _thumbsDownMeta));
-    } else if (isInserting) {
-      context.missing(_thumbsDownMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Definition map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Definition.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(DefinitionsCompanion d) {
-    final map = <String, Variable>{};
-    if (d.id.present) {
-      map['id'] = Variable<int, IntType>(d.id.value);
-    }
-    if (d.term.present) {
-      map['term'] = Variable<String, StringType>(d.term.value);
-    }
-    if (d.definition.present) {
-      map['definition'] = Variable<String, StringType>(d.definition.value);
-    }
-    if (d.example.present) {
-      map['example'] = Variable<String, StringType>(d.example.value);
-    }
-    if (d.author.present) {
-      map['author'] = Variable<String, StringType>(d.author.value);
-    }
-    if (d.thumbsUp.present) {
-      map['thumbs_up'] = Variable<int, IntType>(d.thumbsUp.value);
-    }
-    if (d.thumbsDown.present) {
-      map['thumbs_down'] = Variable<int, IntType>(d.thumbsDown.value);
+    if (thumbsDown.present) {
+      map['thumbs_down'] = Variable<int>(thumbsDown.value);
     }
     return map;
   }
 
   @override
-  $DefinitionsTable createAlias(String alias) {
-    return $DefinitionsTable(_db, alias);
+  String toString() {
+    return (StringBuffer('DefinitionsCompanion(')
+          ..write('id: $id, ')
+          ..write('term: $term, ')
+          ..write('definition: $definition, ')
+          ..write('example: $example, ')
+          ..write('author: $author, ')
+          ..write('thumbsUp: $thumbsUp, ')
+          ..write('thumbsDown: $thumbsDown')
+          ..write(')'))
+        .toString();
   }
 }
 
 abstract class _$AppDatabase extends GeneratedDatabase {
-  _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
-  $TermsTable _terms;
-  $TermsTable get terms => _terms ??= $TermsTable(this);
-  $DefinitionsTable _definitions;
-  $DefinitionsTable get definitions => _definitions ??= $DefinitionsTable(this);
-  TermDao _termDao;
-  TermDao get termDao => _termDao ??= TermDao(this as AppDatabase);
-  DefinitionsDao _definitionsDao;
-  DefinitionsDao get definitionsDao =>
-      _definitionsDao ??= DefinitionsDao(this as AppDatabase);
+  _$AppDatabase(QueryExecutor e) : super(e);
+  late final $TermsTable terms = $TermsTable(this);
+  late final $DefinitionsTable definitions = $DefinitionsTable(this);
+  late final TermDao termDao = TermDao(this as AppDatabase);
+  late final DefinitionsDao definitionsDao =
+      DefinitionsDao(this as AppDatabase);
   @override
-  Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+  Iterable<TableInfo<Table, Object?>> get allTables =>
+      allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [terms, definitions];
 }
 
-// **************************************************************************
-// DaoGenerator
-// **************************************************************************
-
 mixin _$TermDaoMixin on DatabaseAccessor<AppDatabase> {
-  $TermsTable get terms => db.terms;
+  $TermsTable get terms => attachedDatabase.terms;
 }
 mixin _$DefinitionsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $DefinitionsTable get definitions => db.definitions;
+  $DefinitionsTable get definitions => attachedDatabase.definitions;
 }

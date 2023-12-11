@@ -26,7 +26,7 @@ List<RepositoryProvider> repositoryProviders = [
     create: (context) => TermsRepository(
       RepositoryProvider.of<AppDatabase>(context),
     ),
-  )
+  ),
 ];
 
 List<BlocProvider> blocProviders = [

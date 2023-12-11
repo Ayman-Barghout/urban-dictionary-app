@@ -1,5 +1,7 @@
-import 'package:moor/moor.dart';
-import 'package:moor_flutter/moor_flutter.dart';
+import 'dart:developer';
+
+import 'package:drift/drift.dart';
+import 'package:drift_sqflite/drift_sqflite.dart';
 
 part 'database.g.dart';
 
@@ -24,10 +26,10 @@ class Terms extends Table {
   Set<Column> get primaryKey => {term};
 }
 
-@UseMoor(tables: [Terms, Definitions], daos: [TermDao, DefinitionsDao])
+@DriftDatabase(tables: [Terms, Definitions], daos: [TermDao, DefinitionsDao])
 class AppDatabase extends _$AppDatabase {
   AppDatabase()
-      : super(FlutterQueryExecutor.inDatabaseFolder(
+      : super(SqfliteQueryExecutor.inDatabaseFolder(
           path: 'urban_dict_db.sqlite',
           logStatements: true,
         ));
@@ -43,7 +45,7 @@ class AppDatabase extends _$AppDatabase {
       });
 }
 
-@UseDao(tables: [Terms])
+@DriftAccessor(tables: [Terms])
 class TermDao extends DatabaseAccessor<AppDatabase> with _$TermDaoMixin {
   final AppDatabase db;
 
@@ -64,8 +66,7 @@ class TermDao extends DatabaseAccessor<AppDatabase> with _$TermDaoMixin {
           .write(TermsCompanion(lastViewed: Value(DateTime.now())));
   Future<List<Term>> getAllFavorites() => (select(terms)
         ..where((t) => t.isFavorite)
-        ..orderBy(
-            [(t) => OrderingTerm(expression: t.term, mode: OrderingMode.asc)]))
+        ..orderBy([(t) => OrderingTerm(expression: t.term)]))
       .get();
 
   Future<Term> insertNewTerm(String newTerm) async {
@@ -75,14 +76,22 @@ class TermDao extends DatabaseAccessor<AppDatabase> with _$TermDaoMixin {
     return term;
   }
 
-  Future<Term> getTerm(String term) =>
-      (select(terms)..where((t) => t.term.equals(term))).getSingle();
+  Future<Term?> getTerm(String term) async {
+    final query = select(terms)..where((t) => t.term.equals(term));
+    try {
+      final term = await query.getSingle();
+      return term;
+    } catch (e) {
+      log('Error getting term, $e');
+      return null;
+    }
+  }
 
   Future deleteTerm(String term) =>
       (delete(terms)..where((t) => t.term.equals(term))).go();
 }
 
-@UseDao(tables: [Definitions])
+@DriftAccessor(tables: [Definitions])
 class DefinitionsDao extends DatabaseAccessor<AppDatabase>
     with _$DefinitionsDaoMixin {
   final AppDatabase db;
@@ -100,21 +109,28 @@ class DefinitionsDao extends DatabaseAccessor<AppDatabase>
 
   Future insertDefinitions(String term, List<Definition> newDefinitions) async {
     final definitionsToInsert = newDefinitions
-        .map((d) => Definition(
-              id: d.id,
-              term: term,
-              example: d.example,
-              thumbsDown: d.thumbsDown,
-              thumbsUp: d.thumbsUp,
-              definition: d.definition,
-              author: d.author,
-            ))
+        .map(
+          (d) => Definition(
+            id: d.id,
+            term: term,
+            example: d.example,
+            thumbsDown: d.thumbsDown,
+            thumbsUp: d.thumbsUp,
+            definition: d.definition,
+            author: d.author,
+          ),
+        )
         .toList();
     await batch((batch) {
       try {
-        batch.insertAll(definitions, definitionsToInsert,
-            mode: InsertMode.insertOrReplace);
-      } catch (e) {}
+        batch.insertAll(
+          definitions,
+          definitionsToInsert,
+          mode: InsertMode.insertOrReplace,
+        );
+      } catch (e) {
+        log(e.toString());
+      }
     });
   }
 }

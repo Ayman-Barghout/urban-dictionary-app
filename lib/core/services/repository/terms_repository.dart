@@ -22,7 +22,6 @@ class TermsRepository {
       if (!termsWithDays.containsKey(day)) {
         if (start < 0) {
           start = i;
-          termsWithDays[day] = null;
           lastDay = day;
         } else {
           if (end < 0) {

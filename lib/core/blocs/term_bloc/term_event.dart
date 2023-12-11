@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:urban_dict_slang/core/services/db/database.dart';
 
 abstract class TermEvent extends Equatable {
@@ -25,7 +24,7 @@ class ToggleFavorite extends TermEvent {
 class ChangeTerm extends TermEvent {
   final String newTerm;
 
-  const ChangeTerm({@required this.newTerm});
+  const ChangeTerm({required this.newTerm});
 
   @override
   List<Object> get props => [newTerm];

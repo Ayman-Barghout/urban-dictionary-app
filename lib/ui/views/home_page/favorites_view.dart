@@ -8,13 +8,13 @@ import 'package:urban_dict_slang/core/services/db/database.dart';
 import 'package:urban_dict_slang/core/services/repository/term_definitions_repository.dart';
 
 class FavoritesView extends StatelessWidget {
-  const FavoritesView({Key key, this.changeIndex}) : super(key: key);
+  const FavoritesView({super.key, required this.changeIndex});
 
-  final Function changeIndex;
+  final ValueChanged<int> changeIndex;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
       color: Theme.of(context).primaryColor,
       child: Column(
         children: <Widget>[
@@ -24,7 +24,7 @@ class FavoritesView extends StatelessWidget {
               child: Center(
                 child: Text(
                   'Favorites',
-                  style: Theme.of(context).textTheme.headline,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
             ),
@@ -32,107 +32,119 @@ class FavoritesView extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                margin: const EdgeInsets.only(top: 5.0),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).backgroundColor,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    topRight: Radius.circular(20.0),
-                  ),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              margin: const EdgeInsets.only(top: 5.0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.background,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0),
                 ),
-                child: BlocBuilder<FavoritedTermsBloc, FavoritedTermsState>(
-                  builder: (context, state) {
-                    if (state is FavoritedTermsLoading) {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              Theme.of(context).backgroundColor == Colors.white
-                                  ? Theme.of(context).accentColor
-                                  : Colors.white.withOpacity(0.8)),
+              ),
+              child: BlocBuilder<FavoritedTermsBloc, FavoritedTermsState>(
+                builder: (context, state) {
+                  if (state is FavoritedTermsLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).colorScheme.background ==
+                                  Colors.white
+                              ? Theme.of(context).colorScheme.secondary
+                              : Colors.white.withOpacity(0.8),
                         ),
-                      );
-                    } else if (state is FavoritesEmpty) {
-                      return Center(
-                        child: Text(
-                          state.message,
-                          style: Theme.of(context).textTheme.body1,
-                          textAlign: TextAlign.center,
-                          softWrap: true,
-                        ),
-                      );
-                    } else if (state is FavoritedTermsLoaded) {
-                      return ListView.builder(
-                        itemCount: state.favorites.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final Term favoriteTerm = state.favorites[index];
-                          return ListTile(
-                            onTap: () {
-                              BlocProvider.of<TermBloc>(context).add(
-                                ChangeTerm(newTerm: favoriteTerm.term),
-                              );
-                              BlocProvider.of<DefinitionsBloc>(context)
-                                  .add(FetchDefinitions(favoriteTerm.term));
-                              changeIndex(1);
-                            },
-                            title: Text(
-                              favoriteTerm.term[0].toUpperCase() +
-                                  favoriteTerm.term.substring(1),
-                              style: Theme.of(context).textTheme.body1,
-                            ),
-                            trailing: BlocBuilder<TermBloc, TermState>(
-                                builder: (context, state) {
-                              Function _onPressed = () {};
-                              Future _toggleWithoutChanging() async {
+                      ),
+                    );
+                  } else if (state is FavoritesEmpty) {
+                    return Center(
+                      child: Text(
+                        state.message,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                      ),
+                    );
+                  } else if (state is FavoritedTermsLoaded) {
+                    return ListView.builder(
+                      itemCount: state.favorites.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Term favoriteTerm = state.favorites[index];
+                        return ListTile(
+                          onTap: () {
+                            BlocProvider.of<TermBloc>(context).add(
+                              ChangeTerm(newTerm: favoriteTerm.term),
+                            );
+                            BlocProvider.of<DefinitionsBloc>(context)
+                                .add(FetchDefinitions(favoriteTerm.term));
+                            changeIndex(1);
+                          },
+                          title: Text(
+                            favoriteTerm.term[0].toUpperCase() +
+                                favoriteTerm.term.substring(1),
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          trailing: BlocBuilder<TermBloc, TermState>(
+                            builder: (context, state) {
+                              VoidCallback onPressed = () {};
+                              Future toggleWithoutChanging() async {
                                 await RepositoryProvider.of<
                                         TermDefinitionsRepository>(context)
                                     .toggleFavorite(favoriteTerm);
+                                if (!context.mounted) return;
                                 BlocProvider.of<FavoritedTermsBloc>(context)
                                     .add(LoadFavoritedTerms());
                               }
 
                               if (state is TermChanged) {
-                                _onPressed = () async {
+                                onPressed = () async {
                                   if (favoriteTerm.term == state.term.term) {
-                                    _toggleWithoutChanging();
+                                    toggleWithoutChanging();
                                     BlocProvider.of<TermBloc>(context).add(
-                                        ChangeTerm(newTerm: favoriteTerm.term));
+                                      ChangeTerm(
+                                        newTerm: favoriteTerm.term,
+                                      ),
+                                    );
                                   } else {
-                                    _toggleWithoutChanging();
+                                    toggleWithoutChanging();
                                   }
                                 };
                               } else {
-                                _onPressed = _toggleWithoutChanging;
+                                onPressed = toggleWithoutChanging;
                               }
                               return IconButton(
                                 icon: Icon(
                                   Icons.star,
-                                  color: Theme.of(context).backgroundColor ==
+                                  color: Theme.of(context)
+                                              .colorScheme
+                                              .background ==
                                           Colors.white
-                                      ? Theme.of(context).accentColor
+                                      ? Theme.of(context).colorScheme.secondary
                                       : Colors.white.withOpacity(0.8),
                                 ),
                                 onPressed: () {
-                                  _onPressed();
+                                  onPressed();
                                 },
                               );
-                            }),
-                          );
-                        },
-                      );
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              Theme.of(context).backgroundColor == Colors.white
-                                  ? Theme.of(context).accentColor
-                                  : Colors.white.withOpacity(0.8)),
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).colorScheme.background ==
+                                  Colors.white
+                              ? Theme.of(context).colorScheme.secondary
+                              : Colors.white.withOpacity(0.8),
                         ),
-                      );
-                    }
-                  },
-                )),
-          )
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );

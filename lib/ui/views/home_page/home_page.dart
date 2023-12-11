@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:urban_dict_slang/core/blocs/favorited_terms_bloc/bloc.dart';
 import 'package:urban_dict_slang/core/blocs/terms_history_bloc/bloc.dart';
 
+import 'package:urban_dict_slang/ui/views/home_page/favorites_view.dart';
 import 'package:urban_dict_slang/ui/views/home_page/search_view.dart';
 import 'package:urban_dict_slang/ui/views/home_page/terms_view.dart';
-import 'favorites_view.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -16,9 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final PageController controller = PageController(initialPage: 1);
-  int _selectedIndex;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  late int _selectedIndex;
 
   @override
   void initState() {
@@ -43,8 +41,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: Container(
+      resizeToAvoidBottomInset: false,
+      body: ColoredBox(
         color: Colors.white,
         child: PageView(
           onPageChanged: (index) => setState(() {
@@ -66,15 +64,15 @@ class _HomePageState extends State<HomePage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.history),
-            title: Text('History'),
+            label: 'History',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            title: Text('Search'),
+            label: 'Search',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.star),
-            title: Text('Bookmarks'),
+            label: 'Bookmarks',
           ),
         ],
         currentIndex: _selectedIndex,

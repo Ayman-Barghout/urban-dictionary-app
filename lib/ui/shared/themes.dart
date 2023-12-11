@@ -5,11 +5,13 @@ import 'package:urban_dict_slang/ui/shared/text_styles.dart' as text_styles;
 
 final ThemeData mainTheme = ThemeData(
   fontFamily: 'cairo',
-  accentColor: app_colors.mainThemeAccentColor,
+  colorScheme: const ColorScheme.light(
+    primary: app_colors.mainThemePrimaryColor,
+    secondary: app_colors.mainThemeAccentColor,
+  ),
   primaryColor: app_colors.mainThemePrimaryColor,
-  backgroundColor: Colors.white,
   cardColor: Colors.white,
-  bottomAppBarColor: Colors.white,
+  bottomAppBarTheme: const BottomAppBarTheme(color: Colors.white),
   disabledColor: Colors.grey,
   scaffoldBackgroundColor: Colors.white,
   iconTheme: const IconThemeData(color: Colors.white),
@@ -17,21 +19,24 @@ final ThemeData mainTheme = ThemeData(
     elevation: 0,
   ),
   textTheme: TextTheme(
-    caption: text_styles.exampleStyle,
-    overline: text_styles.tapExampleStyle,
-    body1: text_styles.definitionStyle,
-    body2: text_styles.tapDefinitionStyle,
-    headline: text_styles.termHeaderStyle,
+    bodySmall: text_styles.exampleStyle,
+    labelSmall: text_styles.tapExampleStyle,
+    bodyMedium: text_styles.definitionStyle,
+    bodyLarge: text_styles.tapDefinitionStyle,
+    titleLarge: text_styles.termHeaderStyle,
   ),
 );
 
 final ThemeData darkTheme = ThemeData(
   fontFamily: 'cairo',
-  accentColor: app_colors.darkThemeAccentColor,
+  colorScheme: ColorScheme.dark(
+    primary: app_colors.darkThemePrimaryColor,
+    secondary: app_colors.darkThemeAccentColor,
+    background: app_colors.darkThemeBackgroundColor,
+  ),
   primaryColor: app_colors.darkThemePrimaryColor,
-  backgroundColor: app_colors.darkThemeBackgroundColor,
   cardColor: app_colors.darkThemeCardColor,
-  bottomAppBarColor: Colors.white,
+  bottomAppBarTheme: const BottomAppBarTheme(color: Colors.white),
   disabledColor: Colors.grey,
   scaffoldBackgroundColor: app_colors.darkThemeBackgroundColor,
   iconTheme: const IconThemeData(color: Colors.white),
@@ -39,10 +44,10 @@ final ThemeData darkTheme = ThemeData(
     elevation: 0,
   ),
   textTheme: TextTheme(
-    caption: text_styles.exampleStyleDark,
-    overline: text_styles.tapExampleStyleDark,
-    body1: text_styles.definitionStyleDark,
-    body2: text_styles.tapDefinitionStyleDark,
-    headline: text_styles.termHeaderStyleDark,
+    bodySmall: text_styles.exampleStyleDark,
+    labelSmall: text_styles.tapExampleStyleDark,
+    bodyMedium: text_styles.definitionStyleDark,
+    bodyLarge: text_styles.tapDefinitionStyleDark,
+    titleLarge: text_styles.termHeaderStyleDark,
   ),
 );

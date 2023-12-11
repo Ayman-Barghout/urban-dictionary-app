@@ -5,9 +5,7 @@ import 'package:urban_dict_slang/core/blocs/definitions_bloc/bloc.dart';
 import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
 
 class RoundedSearchField extends StatefulWidget {
-  const RoundedSearchField({
-    Key key,
-  }) : super(key: key);
+  const RoundedSearchField({super.key});
 
   @override
   _RoundedSearchFieldState createState() => _RoundedSearchFieldState();

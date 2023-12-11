@@ -1,34 +1,29 @@
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'theme_event.dart';
 part 'theme_state.dart';
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
-  @override
-  ThemeState get initialState => ThemeInitial();
+  ThemeBloc() : super(ThemeInitial()) {
+    on<InitiateTheme>(
+      (event, emit) async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        final isDark = prefs.getBool('isDarkTheme') ?? false;
 
-  @override
-  Stream<ThemeState> mapEventToState(
-    ThemeEvent event,
-  ) async* {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool isDark = prefs.getBool('isDarkTheme');
+        emit(ThemeChanged(isDarkTheme: isDark));
+        prefs.setBool('isDarkTheme', isDark);
+      },
+    );
 
-    if (event is InitiateTheme) {
-      if (isDark == null) {
-        yield const ThemeChanged(isDarkTheme: false);
-        prefs.setBool('isDarkTheme', false);
-      } else {
-        yield ThemeChanged(isDarkTheme: isDark);
-      }
-    }
-    if (event is ToggleTheme) {
-      prefs.setBool('isDarkTheme', !isDark);
-      yield ThemeChanged(isDarkTheme: !isDark);
-    }
+    on<ToggleTheme>(
+      (event, emit) async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        final isDark = prefs.getBool('isDarkTheme') ?? false;
+        prefs.setBool('isDarkTheme', !isDark);
+        emit(ThemeChanged(isDarkTheme: !isDark));
+      },
+    );
   }
 }

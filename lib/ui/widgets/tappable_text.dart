@@ -1,11 +1,15 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 
 class TappableText extends StatelessWidget {
-  const TappableText({Key key, this.onTap, this.rawText, this.type})
-      : super(key: key);
+  const TappableText({
+    super.key,
+    required this.onTap,
+    required this.rawText,
+    required this.type,
+  });
 
-  final Function onTap;
+  final ValueChanged<String> onTap;
   final String rawText;
   final String type;
 
@@ -25,15 +29,15 @@ class TappableText extends StatelessWidget {
               recognizer: TapGestureRecognizer()
                 ..onTap = () => onTap(word.replaceFirst('[', '')),
               style: type == 'definition'
-                  ? Theme.of(context).textTheme.body2
-                  : Theme.of(context).textTheme.overline,
+                  ? Theme.of(context).textTheme.bodyLarge
+                  : Theme.of(context).textTheme.labelSmall,
             );
           } else {
             return TextSpan(
               text: word,
               style: type == 'definition'
-                  ? Theme.of(context).textTheme.body1
-                  : Theme.of(context).textTheme.caption,
+                  ? Theme.of(context).textTheme.bodyMedium
+                  : Theme.of(context).textTheme.bodySmall,
             );
           }
         }).toList(),

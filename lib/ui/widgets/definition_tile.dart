@@ -3,11 +3,14 @@ import 'package:urban_dict_slang/core/services/db/database.dart';
 import 'package:urban_dict_slang/ui/widgets/tappable_text.dart';
 
 class DefinitionTile extends StatelessWidget {
-  const DefinitionTile({Key key, this.definition, this.goToDefinition})
-      : super(key: key);
+  const DefinitionTile({
+    super.key,
+    required this.definition,
+    required this.goToDefinition,
+  });
 
   final Definition definition;
-  final Function goToDefinition;
+  final ValueChanged<String> goToDefinition;
 
   @override
   Widget build(BuildContext context) {

@@ -6,13 +6,13 @@ abstract class ThemeState extends Equatable {
 
 class ThemeInitial extends ThemeState {
   @override
-  List<Object> get props => null;
+  List<Object> get props => [];
 }
 
 class ThemeChanged extends ThemeState {
   final bool isDarkTheme;
 
-  const ThemeChanged({this.isDarkTheme});
+  const ThemeChanged({required this.isDarkTheme});
 
   @override
   List<Object> get props => [isDarkTheme];

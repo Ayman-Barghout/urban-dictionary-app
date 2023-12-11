@@ -1,43 +1,41 @@
 import 'dart:async';
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
 import 'package:urban_dict_slang/core/services/db/database.dart';
 import 'package:urban_dict_slang/core/services/repository/term_definitions_repository.dart';
-import './bloc.dart';
 
 class TermBloc extends Bloc<TermEvent, TermState> {
   final TermDefinitionsRepository termDefinitionsRepository;
 
-  TermBloc(this.termDefinitionsRepository);
-  @override
-  TermState get initialState => InitialTermState();
-
-  @override
-  Stream<TermState> mapEventToState(
-    TermEvent event,
-  ) async* {
-    if (event is ChangeTerm) {
-      yield* _mapChangeTermToState(event);
-    } else if (event is DeleteTerm) {
-      yield* _mapDeleteTermToState(event);
-    } else if (event is ToggleFavorite) {
-      yield* _mapToggleFavoriteToState(event);
-    }
+  TermBloc(this.termDefinitionsRepository) : super(InitialTermState()) {
+    on<ChangeTerm>(_mapChangeTermToState);
+    on<DeleteTerm>(_mapDeleteTermToState);
+    on<ToggleFavorite>(_mapToggleFavoriteToState);
   }
 
-  Stream<TermState> _mapChangeTermToState(ChangeTerm event) async* {
-    yield TermChangeStarted(event.newTerm.toLowerCase());
+  Future<void> _mapChangeTermToState(
+    ChangeTerm event,
+    Emitter<TermState> emit,
+  ) async {
+    emit(TermChangeStarted(event.newTerm.toLowerCase()));
     final Term term = await termDefinitionsRepository.getTerm(event.newTerm);
-    yield TermChanged(term);
+    emit(TermChanged(term));
   }
 
-  Stream<TermState> _mapDeleteTermToState(DeleteTerm event) async* {
+  Future<void> _mapDeleteTermToState(
+    DeleteTerm event,
+    Emitter<TermState> emit,
+  ) async {
     await termDefinitionsRepository.deleteTerm(event.term.term);
-    yield InitialTermState();
+    emit(InitialTermState());
   }
 
-  Stream<TermState> _mapToggleFavoriteToState(ToggleFavorite event) async* {
-    final Term term =
-        await termDefinitionsRepository.toggleFavorite(event.term);
-    yield TermChanged(term);
+  Future<void> _mapToggleFavoriteToState(
+    ToggleFavorite event,
+    Emitter<TermState> emit,
+  ) async {
+    final term = await termDefinitionsRepository.toggleFavorite(event.term);
+    if (term == null) return;
+    emit(TermChanged(term));
   }
 }

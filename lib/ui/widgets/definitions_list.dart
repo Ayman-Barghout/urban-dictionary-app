@@ -5,9 +5,7 @@ import 'package:urban_dict_slang/core/blocs/term_bloc/bloc.dart';
 import 'package:urban_dict_slang/ui/widgets/definition_tile.dart';
 
 class DefinitionsList extends StatelessWidget {
-  const DefinitionsList({
-    Key key,
-  }) : super(key: key);
+  const DefinitionsList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +17,17 @@ class DefinitionsList extends StatelessWidget {
               'Search for a slang or name to find its definitions',
               textAlign: TextAlign.center,
               softWrap: true,
-              style: Theme.of(context).textTheme.body1,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           );
         } else if (state is DefinitionsLoading) {
           return Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).backgroundColor == Colors.white
-                      ? Theme.of(context).accentColor
-                      : Colors.white.withOpacity(0.8)),
+                Theme.of(context).colorScheme.background == Colors.white
+                    ? Theme.of(context).colorScheme.secondary
+                    : Colors.white.withOpacity(0.8),
+              ),
             ),
           );
         } else if (state is DefinitionsLoaded) {
@@ -36,7 +35,7 @@ class DefinitionsList extends StatelessWidget {
             child: ListView.separated(
               itemCount: state.definitions.length,
               separatorBuilder: (BuildContext context, int index) => Divider(
-                color: Theme.of(context).backgroundColor == Colors.white
+                color: Theme.of(context).colorScheme.background == Colors.white
                     ? Colors.grey[500]
                     : Theme.of(context).cardColor,
               ),
@@ -60,7 +59,7 @@ class DefinitionsList extends StatelessWidget {
               state.message,
               textAlign: TextAlign.center,
               softWrap: true,
-              style: Theme.of(context).textTheme.body1,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           );
         } else {

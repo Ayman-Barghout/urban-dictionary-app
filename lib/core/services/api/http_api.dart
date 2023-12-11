@@ -24,12 +24,14 @@ class HttpApi implements Api {
   }
 
   @override
-  Future<List<Definition>> getDefinitions(String term) async {
+  Future<List<Definition>?> getDefinitions(String term) async {
     final bool connected = await _isUserConnected();
     if (connected) {
-      final http.Response response = await http.get(baseUrl + term);
+      final uri = Uri.parse(baseUrl + term);
+      final http.Response response = await http.get(uri);
       if (response.statusCode == 200) {
-        final body = jsonDecode(response.body);
+        final body = jsonDecode(response.body) as Map<String, dynamic>;
+
         final List<Definition> definitions = [];
         final List<Map<String, dynamic>> definitionsList =
             List<Map<String, dynamic>>.from(body['list'] as List);
