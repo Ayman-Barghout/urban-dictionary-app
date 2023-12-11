@@ -284,26 +284,29 @@ packages:
   flare_flutter:
     dependency: transitive
     description:
-      name: flare_flutter
-      sha256: "99d63c60f00fac81249ce6410ee015d7b125c63d8278a30da81edf3317a1f6a0"
-      url: "https://pub.dev"
-    source: hosted
+      path: flare_flutter
+      ref: stable
+      resolved-ref: "2ab67931326cb47d1ac5efbbc8807ad42a6a9b60"
+      url: "https://github.com/AmrNRD/Flare-Flutter.git"
+    source: git
     version: "3.0.2"
   flare_loading:
     dependency: transitive
     description:
-      name: flare_loading
-      sha256: "574edb5bccd66112bb86f946a3de564ee3bbd780b93f7f61b328cfe3b9c40171"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: "2226ce8faed45e62b69c7011b0f4d8a24eaafc0c"
+      url: "https://github.com/4itworks/flare_loading.git"
+    source: git
     version: "3.0.0"
   flare_splash_screen:
     dependency: "direct main"
     description:
-      name: flare_splash_screen
-      sha256: "406e62fc92bd85c5e326bbe12a9d3ca07e84ed8b062b7f2bc7d1cb0de7593a97"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: b3e5f63002051648bbb326b1796fe09036633361
+      url: "https://github.com/4itworks/flare_splash_screen.git"
+    source: git
     version: "4.0.0"
   flutter:
     dependency: "direct main"

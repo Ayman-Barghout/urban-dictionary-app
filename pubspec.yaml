@@ -1,5 +1,6 @@
 name: urban_dict_slang
 description: An urban dictionary app showing urban definitions for slang
+publish_to: none
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -21,7 +22,8 @@ dependencies:
   drift: ^2.14.0
   drift_sqflite: ^2.0.1
   equatable: ^2.0.5
-  flare_splash_screen: ^4.0.0
+  flare_splash_screen:
+    git: https://github.com/4itworks/flare_splash_screen.git
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.3
