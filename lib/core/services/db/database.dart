@@ -6,8 +6,8 @@ import 'package:drift_sqflite/drift_sqflite.dart';
 part 'database.g.dart';
 
 class Definitions extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get term => text()();
+  IntColumn get id => integer().nullable().autoIncrement()();
+  TextColumn get term => text().nullable()();
   TextColumn get definition => text()();
   TextColumn get example => text()();
   TextColumn get author => text()();

@@ -237,7 +237,7 @@ class $DefinitionsTable extends Definitions
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
+      'id', aliasedName, true,
       hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
@@ -246,8 +246,8 @@ class $DefinitionsTable extends Definitions
   static const VerificationMeta _termMeta = const VerificationMeta('term');
   @override
   late final GeneratedColumn<String> term = GeneratedColumn<String>(
-      'term', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'term', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _definitionMeta =
       const VerificationMeta('definition');
   @override
@@ -296,8 +296,6 @@ class $DefinitionsTable extends Definitions
     if (data.containsKey('term')) {
       context.handle(
           _termMeta, term.isAcceptableOrUnknown(data['term']!, _termMeta));
-    } else if (isInserting) {
-      context.missing(_termMeta);
     }
     if (data.containsKey('definition')) {
       context.handle(
@@ -343,9 +341,9 @@ class $DefinitionsTable extends Definitions
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Definition(
       id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}id']),
       term: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}term'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}term']),
       definition: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}definition'])!,
       example: attachedDatabase.typeMapping
@@ -366,16 +364,16 @@ class $DefinitionsTable extends Definitions
 }
 
 class Definition extends DataClass implements Insertable<Definition> {
-  final int id;
-  final String term;
+  final int? id;
+  final String? term;
   final String definition;
   final String example;
   final String author;
   final int thumbsUp;
   final int thumbsDown;
   const Definition(
-      {required this.id,
-      required this.term,
+      {this.id,
+      this.term,
       required this.definition,
       required this.example,
       required this.author,
@@ -384,8 +382,12 @@ class Definition extends DataClass implements Insertable<Definition> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['term'] = Variable<String>(term);
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || term != null) {
+      map['term'] = Variable<String>(term);
+    }
     map['definition'] = Variable<String>(definition);
     map['example'] = Variable<String>(example);
     map['author'] = Variable<String>(author);
@@ -396,8 +398,8 @@ class Definition extends DataClass implements Insertable<Definition> {
 
   DefinitionsCompanion toCompanion(bool nullToAbsent) {
     return DefinitionsCompanion(
-      id: Value(id),
-      term: Value(term),
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      term: term == null && nullToAbsent ? const Value.absent() : Value(term),
       definition: Value(definition),
       example: Value(example),
       author: Value(author),
@@ -410,8 +412,8 @@ class Definition extends DataClass implements Insertable<Definition> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Definition(
-      id: serializer.fromJson<int>(json['id']),
-      term: serializer.fromJson<String>(json['term']),
+      id: serializer.fromJson<int?>(json['id']),
+      term: serializer.fromJson<String?>(json['term']),
       definition: serializer.fromJson<String>(json['definition']),
       example: serializer.fromJson<String>(json['example']),
       author: serializer.fromJson<String>(json['author']),
@@ -423,8 +425,8 @@ class Definition extends DataClass implements Insertable<Definition> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'term': serializer.toJson<String>(term),
+      'id': serializer.toJson<int?>(id),
+      'term': serializer.toJson<String?>(term),
       'definition': serializer.toJson<String>(definition),
       'example': serializer.toJson<String>(example),
       'author': serializer.toJson<String>(author),
@@ -434,16 +436,16 @@ class Definition extends DataClass implements Insertable<Definition> {
   }
 
   Definition copyWith(
-          {int? id,
-          String? term,
+          {Value<int?> id = const Value.absent(),
+          Value<String?> term = const Value.absent(),
           String? definition,
           String? example,
           String? author,
           int? thumbsUp,
           int? thumbsDown}) =>
       Definition(
-        id: id ?? this.id,
-        term: term ?? this.term,
+        id: id.present ? id.value : this.id,
+        term: term.present ? term.value : this.term,
         definition: definition ?? this.definition,
         example: example ?? this.example,
         author: author ?? this.author,
@@ -481,8 +483,8 @@ class Definition extends DataClass implements Insertable<Definition> {
 }
 
 class DefinitionsCompanion extends UpdateCompanion<Definition> {
-  final Value<int> id;
-  final Value<String> term;
+  final Value<int?> id;
+  final Value<String?> term;
   final Value<String> definition;
   final Value<String> example;
   final Value<String> author;
@@ -499,14 +501,13 @@ class DefinitionsCompanion extends UpdateCompanion<Definition> {
   });
   DefinitionsCompanion.insert({
     this.id = const Value.absent(),
-    required String term,
+    this.term = const Value.absent(),
     required String definition,
     required String example,
     required String author,
     required int thumbsUp,
     required int thumbsDown,
-  })  : term = Value(term),
-        definition = Value(definition),
+  })  : definition = Value(definition),
         example = Value(example),
         author = Value(author),
         thumbsUp = Value(thumbsUp),
@@ -532,8 +533,8 @@ class DefinitionsCompanion extends UpdateCompanion<Definition> {
   }
 
   DefinitionsCompanion copyWith(
-      {Value<int>? id,
-      Value<String>? term,
+      {Value<int?>? id,
+      Value<String?>? term,
       Value<String>? definition,
       Value<String>? example,
       Value<String>? author,
